@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BePro · Полная версия</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ===== СТИЛИ (полная версия) ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: #0a080c;
+            color: #f5eef0;
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.4s, color 0.4s;
+        }
+        body.light { background: #f5eef0; color: #1a1418; }
+        body.light .glass-card, body.light .header, body.light .tabs,
+        body.light .tg-widget iframe, body.light .slider-wrapper,
+        body.light .login-box, body.light .poll-box, body.light .admin-panel {
+            background: rgba(245, 238, 240, 0.65) !important;
+            border-color: rgba(200, 70, 100, 0.08) !important;
+        }
+        body.light .feature-item, body.light .changelog-item,
+        body.light .sub-text, body.light .online-counter,
+        body.light .form-group input, body.light .form-group textarea,
+        body.light .slide, body.light .review-item,
+        body.light .news-item, body.light .rule-item,
+        body.light .user-item {
+            color: #2a1e24 !important;
+            background: rgba(200, 70, 100, 0.02) !important;
+        }
+        body.light .badge { background: rgba(200, 70, 100, 0.08); color: #cc2244; }
+        body.light .tab-btn { color: #6a4a52; }
+        body.light .tab-btn.active { background: rgba(200, 70, 100, 0.12); color: #cc2244; }
+        body.light .btn-secondary { color: #cc2244; border-color: rgba(200, 70, 100, 0.2); }
+        body.light .btn-outline { border-color: rgba(100, 60, 70, 0.15); color: #5a3a42; }
+        body.light .footer a, body.light .tg-link { color: #cc2244; }
+        body.light .logo h1 { background: linear-gradient(135deg, #cc2244, #ff3366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        body.light .highlight-text, body.light .sub-text strong, body.light .online-counter .num { color: #cc2244 !important; }
+
+        /* ===== ФОН ===== */
+        #particles-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 30% 20%, #1a0e14, #0a080c 70%);
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: twinkle var(--duration) infinite alternate;
+        }
+        @keyframes twinkle { 0% { opacity: 0.05; transform: scale(0.7); } 100% { opacity: 0.6; transform: scale(1.2); } }
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.08;
+            animation: floatOrb 20s infinite alternate;
+        }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(40px, -30px) scale(1.2); } }
+        #sakura-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .petal {
+            position: absolute;
+            top: -20px;
+            width: 14px; height: 16px;
+            background: radial-gradient(circle at 40% 30%, #ffb7c5, #ff8a9e);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.3;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.4; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.2); opacity: 0; }
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px 50px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 14, 20, 0.55);
+            backdrop-filter: blur(24px);
+            padding: 18px 30px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.12);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 30px;
+            transition: background 0.4s, border-color 0.4s;
+        }
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff7799, #ff3366, #cc2244);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+        .logo h1 i { -webkit-text-fill-color: initial; color: #ff7799; margin-right: 6px; }
+        .logo span { font-size: 12px; color: #b38a9e; display: block; -webkit-text-fill-color: #b38a9e; letter-spacing: 2px; }
+        .header-badge {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: rgba(255, 51, 102, 0.1);
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 51, 102, 0.15);
+            color: #ff7799;
+            backdrop-filter: blur(4px);
+            letter-spacing: 1px;
+        }
+        .theme-toggle, .admin-toggle {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 51, 102, 0.08);
+            border-radius: 40px;
+            padding: 6px 16px;
+            color: #ff7799;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(4px);
+            transition: 0.25s;
+        }
+        .theme-toggle:hover, .admin-toggle:hover { background: rgba(255, 51, 102, 0.06); }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            background: rgba(20, 14, 20, 0.35);
+            backdrop-filter: blur(16px);
+            padding: 8px 12px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.04);
+            margin-bottom: 30px;
+            justify-content: center;
+            transition: background 0.4s, border-color 0.4s;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 13px;
+            color: #b38a9e;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+        }
+        .tab-btn:hover { color: #f0e6ec; background: rgba(255, 51, 102, 0.04); }
+        .tab-btn.active { background: rgba(255, 51, 102, 0.15); color: #ff7799; box-shadow: 0 0 40px rgba(255, 51, 102, 0.04); }
+
+        .tab-content { display: none; animation: fadeSlide 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        .glass-card {
+            background: rgba(20, 14, 20, 0.35);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 51, 102, 0.05);
+            padding: 28px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            transition: background 0.4s, border-color 0.4s, color 0.4s;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 16px 18px;
+            border-radius: 18px;
+            border-left: 4px solid #ff3366;
+            font-size: 14px;
+            color: #dcc8d4;
+            transition: 0.25s;
+        }
+        .feature-item:hover { background: rgba(255, 51, 102, 0.02); border-left-color: #ff7799; }
+        .feature-item strong { color: #ff7799; display: block; font-size: 15px; margin-bottom: 3px; }
+
+        .btn-group { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 16px 0; }
+        .btn-primary, .btn-secondary, .btn-outline, .btn-danger {
+            padding: 14px 36px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            text-decoration: none;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            flex: 1 1 auto;
+            min-width: 150px;
+            text-align: center;
+        }
+        .btn-primary { background: linear-gradient(135deg, #ff3366, #cc2244); color: #fff; box-shadow: 0 6px 28px rgba(255, 51, 102, 0.2); }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 8px 36px rgba(255, 51, 102, 0.35); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255, 51, 102, 0.15); color: #ff7799; }
+        .btn-secondary:hover { background: rgba(255, 51, 102, 0.04); border-color: #ff3366; }
+        .btn-outline { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.04); color: #b38a9e; }
+        .btn-outline:hover { border-color: #ff7799; color: #ff7799; }
+        .btn-danger { background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.3); color: #ff5555; }
+        .btn-danger:hover { background: rgba(255, 0, 0, 0.25); }
+
+        .highlight-text { color: #ff7799; font-weight: 700; }
+        .sub-text { color: #b38a9e; font-size: 15px; line-height: 1.6; }
+        .sub-text strong { color: #ff7799; }
+
+        .online-counter {
+            display: inline-flex; align-items: center; gap: 12px;
+            background: rgba(255, 255, 255, 0.01);
+            padding: 10px 24px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.04);
+            font-size: 14px; color: #b38a9e;
+        }
+        .online-counter .dot { width: 10px; height: 10px; border-radius: 50%; background: #66ddaa; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+        .online-counter .num { color: #ff7799; font-weight: 700; font-size: 18px; }
+
+        .slider-wrapper {
+            position: relative; border-radius: 24px; overflow: hidden;
+            border: 1px solid rgba(255, 51, 102, 0.04);
+            margin: 16px 0;
+        }
+        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .slide {
+            min-width: 100%; padding: 40px 20px; text-align: center;
+            background: rgba(10, 8, 12, 0.3); backdrop-filter: blur(4px);
+            min-height: 150px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            color: #b38a9e; font-size: 17px;
+        }
+        .slide i { font-size: 44px; color: #ff7799; margin-bottom: 8px; }
+        .slider-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 51, 102, 0.08); backdrop-filter: blur(8px);
+            border: none; color: #ff7799; padding: 10px 16px;
+            cursor: pointer; border-radius: 40px; font-size: 18px;
+            transition: 0.25s; z-index: 5;
+        }
+        .slider-btn:hover { background: rgba(255, 51, 102, 0.2); }
+        .slider-btn.left { left: 10px; }
+        .slider-btn.right { right: 10px; }
+
+        .changelog-item {
+            display: flex; align-items: flex-start; gap: 12px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 16px; border-left: 4px solid #ff3366;
+            margin-bottom: 10px; color: #dcc8d4; font-size: 14px;
+            flex-wrap: wrap;
+        }
+        .changelog-item .tag {
+            font-size: 11px; font-weight: 700; padding: 2px 14px;
+            border-radius: 30px; flex-shrink: 0;
+        }
+        .tag.added { background: rgba(0, 200, 100, 0.1); color: #66ddaa; }
+        .tag.fixed { background: rgba(255, 150, 50, 0.1); color: #ffaa55; }
+        .tag.wip { background: rgba(100, 150, 255, 0.1); color: #88bbff; }
+        .changelog-item strong { color: #ff7799; min-width: 70px; }
+
+        .form-group {
+            display: flex; flex-direction: column; gap: 14px;
+            max-width: 500px; margin: 0 auto;
+        }
+        .form-group input, .form-group textarea {
+            padding: 14px 20px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.06);
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(4px);
+            color: #f0e6ec; font-size: 15px; outline: none;
+            font-family: inherit;
+        }
+        .form-group textarea { border-radius: 24px; min-height: 100px; resize: vertical; }
+        .form-group input:focus, .form-group textarea:focus { border-color: #ff3366; }
+
+        .tg-widget { display: flex; justify-content: center; margin: 16px 0; }
+        .tg-widget iframe {
+            border-radius: 24px; border: 1px solid rgba(255, 51, 102, 0.04);
+            max-width: 420px; width: 100%; height: 320px;
+        }
+
+        .footer {
+            margin-top: 40px; text-align: center; font-size: 13px;
+            color: #5a4a52; border-top: 1px solid rgba(255, 51, 102, 0.03);
+            padding-top: 24px;
+        }
+        .footer a { color: #ff7799; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        .register-box, .login-box, .poll-box, .admin-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 51, 102, 0.06);
+            border-radius: 24px;
+            padding: 24px 28px;
+            max-width: 600px;
+            margin: 16px auto;
+            text-align: center;
+        }
+        .register-box input, .login-box input, .admin-panel input {
+            width: 100%; padding: 14px 20px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.06);
+            background: rgba(255, 255, 255, 0.01);
+            color: #f0e6ec; font-size: 15px; outline: none;
+            margin-bottom: 12px; font-family: inherit;
+        }
+        .register-box input:focus, .login-box input:focus, .admin-panel input:focus { border-color: #ff3366; }
+        .register-box .btn-primary, .login-box .btn-primary, .admin-panel .btn-primary { width: 100%; border: none; }
+        .register-status, .login-status, .admin-status { margin-top: 12px; font-size: 14px; color: #b38a9e; }
+
+        .cabinet { display: none; }
+        .cabinet.active { display: block; }
+
+        .news-item {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 16px 20px; border-radius: 18px;
+            border-left: 4px solid #ff7799;
+            margin-bottom: 12px; color: #dcc8d4;
+        }
+        .news-item .date { font-size: 12px; color: #b38a9e; display: block; margin-bottom: 4px; }
+        .news-item strong { color: #ff7799; }
+
+        .rule-item {
+            padding: 12px 18px; border-radius: 16px;
+            border-left: 4px solid #ff3366;
+            margin-bottom: 8px; color: #dcc8d4;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .poll-box .option {
+            display: block; width: 100%; padding: 12px;
+            margin-bottom: 8px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.06);
+            background: rgba(255, 255, 255, 0.01);
+            color: #f0e6ec; cursor: pointer; transition: 0.25s;
+            font-family: inherit; font-size: 15px;
+        }
+        .poll-box .option:hover { background: rgba(255, 51, 102, 0.04); border-color: #ff3366; }
+        .poll-box .option.selected { background: rgba(255, 51, 102, 0.08); border-color: #ff3366; color: #ff7799; }
+        .poll-result { margin-top: 12px; font-size: 14px; color: #b38a9e; }
+
+        .download-counter {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 255, 255, 0.01);
+            padding: 8px 20px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.04);
+            font-size: 14px; color: #b38a9e;
+        }
+
+        .user-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ff3366;
+            color: #dcc8d4;
+        }
+        .user-item .role { font-size: 12px; padding: 2px 12px; border-radius: 30px; }
+        .user-item .role.admin { background: rgba(255, 51, 102, 0.15); color: #ff7799; }
+        .user-item .role.user { background: rgba(100, 150, 255, 0.1); color: #88bbff; }
+
+        /* ===== АДМИН ПАНЕЛЬ (overlay) ===== */
+        #adminPanel {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(12px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+        }
+        #adminPanel.active { display: flex; }
+        #adminPanel .panel-content {
+            background: #141a24;
+            padding: 40px 35px;
+            border-radius: 32px;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(255, 51, 102, 0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #adminPanel .panel-content h2 { color: #ff7799; margin-bottom: 16px; }
+        #adminPanel .panel-content .log-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 13px;
+            color: #b38a9e;
+        }
+        #adminPanel .close-panel {
+            float: right; background: none; border: none;
+            color: #ff7799; font-size: 24px; cursor: pointer;
+        }
+        #adminPanel input, #adminPanel select {
+            width: 100%; padding: 12px 18px; border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.06);
+            background: rgba(255, 255, 255, 0.01);
+            color: #f0e6ec; font-size: 14px; outline: none;
+            margin-bottom: 10px; font-family: inherit;
+        }
+        #adminPanel input:focus, #adminPanel select:focus { border-color: #ff3366; }
+
+        @media (max-width: 700px) {
+            .header { flex-direction: column; align-items: stretch; text-align: center; padding: 16px 18px; }
+            .header-badge { justify-content: center; flex-wrap: wrap; }
+            .tabs { border-radius: 30px; padding: 6px 8px; gap: 2px; }
+            .tab-btn { padding: 8px 10px; font-size: 11px; }
+            .glass-card { padding: 18px 14px; }
+            .btn-primary, .btn-secondary, .btn-outline, .btn-danger { min-width: unset; }
+            .slider-btn { padding: 6px 12px; font-size: 14px; }
+            .tg-widget iframe { height: 220px; }
+            .register-box, .login-box, .poll-box, .admin-panel { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-bg"></div>
+    <div id="sakura-container"></div>
+
+    <!-- ===== АДМИН-ПАНЕЛЬ (overlay) ===== -->
+    <div id="adminPanel">
+        <div class="panel-content">
+            <button class="close-panel" id="closeAdminPanel">&times;</button>
+            <h2><i class="fas fa-crown"></i> Админ-панель</h2>
+
+            <div id="adminLoginBox">
+                <input type="text" id="adminLogin" placeholder="Логин админа">
+                <input type="password" id="adminPass" placeholder="Пароль админа">
+                <button class="btn-primary" id="adminLoginBtn" style="width:100%;">Войти как админ</button>
+                <div id="adminLoginStatus" style="margin-top:12px; font-size:14px; color:#b38a9e;">⏳ Введи данные админа</div>
+            </div>
+
+            <div id="adminControlPanel" style="display:none;">
+                <p style="color:#66ddaa;">✅ Вы вошли как админ</p>
+                <div style="margin:16px 0; padding:16px; background:rgba(255,255,255,0.02); border-radius:16px;">
+                    <h3 style="color:#ff7799; font-size:16px;">➕ Добавить пользователя</h3>
+                    <input type="text" id="newUserNick" placeholder="Ник игрока">
+                    <input type="text" id="newUserPass" placeholder="Пароль">
+                    <select id="newUserRole">
+                        <option value="user">Игрок</option>
+                        <option value="admin">Админ</option>
+                    </select>
+                    <button class="btn-primary" id="addUserBtn" style="width:100%;">Добавить</button>
+                    <div id="addUserStatus" style="margin-top:8px; font-size:13px; color:#b38a9e;"></div>
+                </div>
+                <div>
+                    <h3 style="color:#ff7799; font-size:16px;">👥 Пользователи</h3>
+                    <div id="userList"></div>
+                </div>
+                <button class="btn-danger" id="adminLogoutBtn" style="width:100%; margin-top:12px;">🚪 Выйти из админки</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+
+        <header class="header">
+            <div class="logo">
+                <h1><i class="fas fa-cherry"></i> BePro</h1>
+                <span>✦ админ-панель ✦</span>
+            </div>
+            <div class="header-badge">
+                <span class="badge">⚡ бета v1.0</span>
+                <button class="admin-toggle" id="adminToggle"><i class="fas fa-crown"></i> Админ</button>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="home">🌸 О нас</button>
+            <button class="tab-btn" data-tab="features">✨ Функции</button>
+            <button class="tab-btn" data-tab="register">📝 Регистрация</button>
+            <button class="tab-btn" data-tab="cabinet">🔐 Кабинет</button>
+            <button class="tab-btn" data-tab="beta">💎 Бета / Pro</button>
+            <button class="tab-btn" data-tab="media">🖼️ Медиа</button>
+            <button class="tab-btn" data-tab="news">📰 Новости</button>
+            <button class="tab-btn" data-tab="rules">📜 Правила</button>
+            <button class="tab-btn" data-tab="changelog">📦 Обновления</button>
+            <button class="tab-btn" data-tab="contacts">💬 Контакты</button>
+        </nav>
+
+        <div id="home" class="tab-content active">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:26px; margin-bottom:10px;">🌸 BePro Client</h2>
+                <p class="sub-text"><strong>Команда Ainel</strong> — клиент для DDNet <span class="highlight-text">без читов</span>, только визуал и комфорт.</p>
+                <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                    <span class="online-counter"><span class="dot"></span> Онлайн: <span class="num" id="onlineCount">14</span></span>
+                    <span class="download-counter"><i class="fas fa-download"></i> Скачиваний: <span id="downloadCount">847</span></span>
+                    <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">📱 Telegram</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="features" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">✨ Функции</h2>
+                <div class="grid-2col">
+                    <div class="feature-item"><strong>🎨 Трейлы</strong>Следы за игроком</div>
+                    <div class="feature-item"><strong>🦋 Крылья</strong>Анимированные</div>
+                    <div class="feature-item"><strong>⚔️ Катана</strong>Косметика</div>
+                    <div class="feature-item"><strong>👼 Нимб</strong>Свечение</div>
+                    <div class="feature-item"><strong>🔮 Сферы</strong>Парящие шары</div>
+                    <div class="feature-item"><strong>🖥️ HUD</strong>Настройка экрана</div>
+                    <div class="feature-item"><strong>😄 Эмодзи</strong>На весь экран</div>
+                    <div class="feature-item"><strong>💬 Trash Talk</strong>Фразы после килла</div>
+                    <div class="feature-item"><strong>🌫️ Overlay</strong>Туман, глитч</div>
+                    <div class="feature-item"><strong>🏷️ Метка</strong>Значок в табе</div>
+                    <div class="feature-item"><strong>🎛️ Меню</strong>Масштаб, анимация</div>
+                    <div class="feature-item"><strong>⚡ FPS-режим</strong>Оптимизация</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="register" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📝 Регистрация</h2>
+                <p class="sub-text">Заполни форму — админ создаст аккаунт.</p>
+                <div class="register-box">
+                    <input type="text" id="regNick" placeholder="Твой ник в DDNet">
+                    <input type="text" id="regTelegram" placeholder="Твой Telegram">
+                    <button class="btn-primary" id="registerBtn">📩 Отправить заявку</button>
+                    <div class="register-status" id="registerStatus">⏳ Ожидай ответа админа</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cabinet" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">🔐 Кабинет</h2>
+                <div class="login-box" id="loginBox">
+                    <input type="text" id="loginNick" placeholder="Ник">
+                    <input type="password" id="loginPass" placeholder="Пароль">
+                    <button class="btn-primary" id="loginBtn">Войти</button>
+                    <div class="login-status" id="loginStatus">⏳ Введи данные от админа</div>
+                </div>
+                <div class="cabinet" id="cabinetContent">
+                    <p style="color:#ff7799; font-size:18px;">✅ Добро пожаловать, <span id="cabinetNick">Ainel</span>!</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:16px;">
+                        <button class="btn-secondary" onclick="alert('Скачивание начато!')">📥 Скачать клиент</button>
+                        <button class="btn-outline" id="logoutBtn">🚪 Выйти</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="beta" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">💎 Бета / Pro</h2>
+                <div style="display:flex; flex-wrap:wrap; gap:20px; margin:18px 0;">
+                    <div style="flex:1; min-width:180px; background:rgba(255,255,255,0.01); padding:20px; border-radius:24px; text-align:center;">
+                        <div style="font-size:26px; font-weight:700;">Бета</div>
+                        <div style="color:#b38a9e;">бесплатно</div>
+                        <button class="btn-secondary" style="width:100%; margin-top:10px;" onclick="alert('Скачивание начато!')">📥 Скачать</button>
+                    </div>
+                    <div style="flex:1; min-width:180px; background:rgba(255,51,102,0.03); padding:20px; border-radius:24px; text-align:center;">
+                        <div style="font-size:26px; font-weight:700; color:#ff7799;">Pro</div>
+                        <div style="color:#b38a9e;">поддержка</div>
+                        <button class="btn-primary" style="width:100%; margin-top:10px;" onclick="alert('Спасибо! Ссылка в Telegram.')">💎 Купить</button>
+                    </div>
+                </div>
+                <div class="tg-widget"><iframe src="https://t.me/BePronet?embed=1"></iframe></div>
+            </div>
+        </div>
+
+        <div id="media" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">🖼️ Галерея</h2>
+                <div class="slider-wrapper">
+                    <div class="slides" id="slides">
+                        <div class="slide"><i class="fas fa-palette"></i><span>HUD</span></div>
+                        <div class="slide"><i class="fas fa-feather-alt"></i><span>Крылья</span></div>
+                        <div class="slide"><i class="fas fa-laugh-wink"></i><span>Эмодзи</span></div>
+                        <div class="slide"><i class="fas fa-cogs"></i><span>Меню</span></div>
+                        <div class="slide"><i class="fas fa-star"></i><span>Эффекты</span></div>
+                    </div>
+                    <button class="slider-btn left" id="slideLeft"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn right" id="slideRight"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="news" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📰 Новости</h2>
+                <div class="news-item"><span class="date">01.07.2026</span><strong>Бета запущена!</strong></div>
+                <div class="news-item"><span class="date">28.06.2026</span><strong>Открыт Discord</strong></div>
+                <div class="news-item"><span class="date">25.06.2026</span><strong>Старт регистрации</strong></div>
+            </div>
+        </div>
+
+        <div id="rules" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📜 Правила</h2>
+                <div class="rule-item">1. Без читов и сторонних модов.</div>
+                <div class="rule-item">2. Уважай игроков.</div>
+                <div class="rule-item">3. Не продавай аккаунты.</div>
+                <div class="rule-item">4. Админ может забанить без объяснений.</div>
+                <div class="rule-item">5. Клиент «как есть».</div>
+            </div>
+        </div>
+
+        <div id="changelog" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📦 Обновления</h2>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.0.3</strong> — Эмодзи, Trash Talk</div>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.0.2</strong> — HUD, виджеты</div>
+                <div class="changelog-item"><span class="tag fixed">FIX</span> <strong>v1.0.1</strong> — Исправлены вылеты</div>
+            </div>
+        </div>
+
+        <div id="contacts" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">💬 Контакты</h2>
+                <form class="form-group" id="feedbackForm">
+                    <input type="text" id="fbNick" placeholder="Твой ник" required>
+                    <input type="text" id="fbTelegram" placeholder="Твой Telegram" required>
+                    <textarea id="fbMessage" placeholder="Сообщение..." required></textarea>
+                    <button type="submit" class="btn-primary" style="border:none; cursor:pointer;">📩 Отправить</button>
+                </form>
+                <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:20px;">
+                    <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:12px 30px;"><i class="fab fa-telegram"></i> Telegram</a>
+                    <a href="https://discord.gg/H5MSJmq2V" target="_blank" class="btn-primary" style="text-decoration:none; padding:12px 30px;"><i class="fab fa-discord"></i> Discord</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card" style="margin-top:10px;">
+            <h2 style="color:#ff7799; font-size:20px;">📊 Опрос: какую фичу добавить?</h2>
+            <div class="poll-box" style="max-width:100%;">
+                <button class="option" data-poll="Трейлы">🎨 Трейлы</button>
+                <button class="option" data-poll="Эмодзи">😄 Эмодзи</button>
+                <button class="option" data-poll="HUD">🖥️ HUD</button>
+                <button class="option" data-poll="Крылья">🦋 Крылья</button>
+                <div class="poll-result" id="pollResult">📊 Голосуй!</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            BePro · Ainel &nbsp;·&nbsp;
+            <a href="https://t.me/BePronet" target="_blank">Telegram</a> &nbsp;·&nbsp;
+            <a href="https://discord.gg/H5MSJmq2V" target="_blank">Discord</a>
+        </footer>
+    </div>
+
+    <script>
+        // ===== WEBHOOK =====
+        const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1521737219180859454/gqWNokIPPrVfkspbu8IBG4SobLqfSVNYzAoMYhvxIsT3MXoLBhALTGlUxeYtuP7QOq5n';
+
+        function sendToDiscord(message, color = 0xff3366) {
+            if (!DISCORD_WEBHOOK) return;
+            fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    embeds: [{ title: '📬 BePro уведомление', description: message, color: color, timestamp: new Date().toISOString() }]
+                })
+            }).catch(() => {});
+        }
+
+        // ===== СИСТЕМА ПОЛЬЗОВАТЕЛЕЙ =====
+        let users = JSON.parse(localStorage.getItem('bepro_users')) || {
+            'admin': { password: 'admin123', role: 'admin' },
+            'Ainel': { password: 'bepro2026', role: 'user' }
+        };
+
+        function saveUsers() {
+            localStorage.setItem('bepro_users', JSON.stringify(users));
+        }
+
+        function renderUserList() {
+            const container = document.getElementById('userList');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let nick in users) {
+                const u = users[nick];
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                div.innerHTML = `
+                    <span><strong>${nick}</strong> <span class="role ${u.role}">${u.role === 'admin' ? 'Админ' : 'Игрок'}</span></span>
+                    <button class="btn-danger" style="padding:4px 16px; font-size:12px; min-width:auto;" onclick="deleteUser('${nick}')">Удалить</button>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function deleteUser(nick) {
+            if (nick === 'admin') { alert('Нельзя удалить главного админа!'); return; }
+            if (confirm(`Удалить пользователя ${nick}?`)) {
+                delete users[nick];
+                saveUsers();
+                renderUserList();
+                sendToDiscord(`🗑️ Удалён пользователь: ${nick}`, 0xff5555);
+            }
+        }
+
+        // ===== АДМИН-ПАНЕЛЬ =====
+        document.getElementById('adminToggle').addEventListener('click', () => {
+            document.getElementById('adminPanel').style.display = 'flex';
+        });
+        document.getElementById('closeAdminPanel').addEventListener('click', () => {
+            document.getElementById('adminPanel').style.display = 'none';
+        });
+
+        document.getElementById('adminLoginBtn').addEventListener('click', function() {
+            const login = document.getElementById('adminLogin').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
+            const status = document.getElementById('adminLoginStatus');
+            if (users[login] && users[login].password === pass && users[login].role === 'admin') {
+                document.getElementById('adminLoginBox').style.display = 'none';
+                document.getElementById('adminControlPanel').style.display = 'block';
+                renderUserList();
+                status.textContent = '✅ Вход выполнен!';
+                status.style.color = '#66ddaa';
+                sendToDiscord(`🔐 Админ вошёл: ${login}`, 0x88bbff);
+            } else {
+                status.textContent = '❌ Неверный логин или пароль.';
+                status.style.color = '#ff7799';
+            }
+        });
+
+        document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+            document.getElementById('adminLoginBox').style.display = 'block';
+            document.getElementById('adminControlPanel').style.display = 'none';
+            document.getElementById('adminLogin').value = '';
+            document.getElementById('adminPass').value = '';
+            document.getElementById('adminLoginStatus').textContent = '⏳ Введи данные админа';
+            document.getElementById('adminLoginStatus').style.color = '#b38a9e';
+            document.getElementById('adminPanel').style.display = 'none';
+        });
+
+        // ===== ДОБАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯ =====
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            const nick = document.getElementById('newUserNick').value.trim();
+            const pass = document.getElementById('newUserPass').value.trim();
+            const role = document.getElementById('newUserRole').value;
+            const status = document.getElementById('addUserStatus');
+            if (!nick || !pass) {
+                status.textContent = '❌ Заполни ник и пароль.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            if (users[nick]) {
+                status.textContent = '❌ Пользователь уже существует.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            users[nick] = { password: pass, role: role };
+            saveUsers();
+            renderUserList();
+            status.textContent = '✅ Пользователь добавлен!';
+            status.style.color = '#66ddaa';
+            document.getElementById('newUserNick').value = '';
+            document.getElementById('newUserPass').value = '';
+            sendToDiscord(`➕ Добавлен пользователь: ${nick} (${role})`, 0x66ddaa);
+        });
+
+        // ===== ВХОД В КАБИНЕТ =====
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const nick = document.getElementById('loginNick').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const status = document.getElementById('loginStatus');
+            if (users[nick] && users[nick].password === pass) {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('cabinetContent').classList.add('active');
+                document.getElementById('cabinetNick').textContent = nick;
+                status.textContent = '✅ Вход выполнен!';
+                status.style.color = '#66ddaa';
+                sendToDiscord(`🔐 Вход в кабинет: ${nick}`, 0x88bbff);
+            } else {
+                status.textContent = '❌ Неверный ник или пароль.';
+                status.style.color = '#ff7799';
+            }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('cabinetContent').classList.remove('active');
+            document.getElementById('loginNick').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('loginStatus').textContent = '⏳ Введи данные от админа';
+            document.getElementById('loginStatus').style.color = '#b38a9e';
+        });
+
+        // ===== РЕГИСТРАЦИЯ =====
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            const nick = document.getElementById('regNick').value.trim();
+            const tg = document.getElementById('regTelegram').value.trim();
+            const status = document.getElementById('registerStatus');
+            if (nick.length < 2 || tg.length < 2) {
+                status.textContent = '❌ Заполни оба поля.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            sendToDiscord(`📝 **Новая заявка**\nНик: ${nick}\nTelegram: ${tg}`, 0x66ddaa);
+            status.textContent = '✅ Заявка отправлена! Админ создаст аккаунт.';
+            status.style.color = '#66ddaa';
+            document.getElementById('regNick').value = '';
+            document.getElementById('regTelegram').value = '';
+            setTimeout(() => {
+                status.textContent = '⏳ Ожидай ответа админа';
+                status.style.color = '#b38a9e';
+            }, 5000);
+        });
+
+        // ===== ОПРОС =====
+        let pollVotes = { 'Трейлы': 0, 'Эмодзи': 0, 'HUD': 0, 'Крылья': 0 };
+        document.querySelectorAll('.poll-box .option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.poll-box .option').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                const key = this.textContent.trim();
+                pollVotes[key] = (pollVotes[key] || 0) + 1;
+                const total = Object.values(pollVotes).reduce((a, b) => a + b, 0);
+                let result = '';
+                for (let k in pollVotes) {
+                    const pct = total ? Math.round(pollVotes[k] / total * 100) : 0;
+                    result += `${k}: ${pct}% `;
+                }
+                document.getElementById('pollResult').textContent = '📊 ' + result;
+                sendToDiscord(`🗳️ Голос: ${key} (всего: ${total})`, 0xffaa55);
+            });
+        });
+
+        // ===== ФОРМА =====
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nick = document.getElementById('fbNick').value.trim();
+            const tg = document.getElementById('fbTelegram').value.trim();
+            const msg = document.getElementById('fbMessage').value.trim();
+            if (!nick || !tg || !msg) { alert('Заполни все поля!'); return; }
+            sendToDiscord(`💬 **Новое сообщение**\nОт: ${nick} (${tg})\nСообщение: ${msg}`, 0x88bbff);
+            alert('🌸 Сообщение отправлено! Мы ответим в Telegram или Discord.');
+            this.reset();
+        });
+
+        // ===== ВКЛАДКИ =====
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabs.forEach(b => b.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        // ===== СЛАЙДЕР =====
+        let slideIdx = 0;
+        const slides = document.getElementById('slides');
+        const totalSlides = document.querySelectorAll('.slide').length;
+        document.getElementById('slideLeft').addEventListener('click', () => {
+            slideIdx = (slideIdx - 1 + totalSlides) % totalSlides;
+            slides.style.transform = `translateX(-${slideIdx * 100}%)`;
+        });
+        document.getElementById('slideRight').addEventListener('click', () => {
+            slideIdx = (slideIdx + 1) % totalSlides;
+            slides.style.transform = `translateX(-${slideIdx * 100}%)`;
+        });
+        setInterval(() => {
+            slideIdx = (slideIdx + 1) % totalSlides;
+            slides.style.transform = `translateX(-${slideIdx * 100}%)`;
+        }, 6000);
+
+        // ===== ТЕМА =====
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('light');
+            this.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+        });
+
+        // ===== САКУРА =====
+        (function() {
+            const container = document.getElementById('sakura-container');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = (8 + Math.random() * 12) + 'px';
+                p.style.height = (10 + Math.random() * 12) + 'px';
+                p.style.animationDuration = (10 + Math.random() * 18) + 's';
+                p.style.animationDelay = (Math.random() * 20) + 's';
+                p.style.opacity = 0.15 + Math.random() * 0.3;
+                container.appendChild(p);
+            }
+        })();
+
+        // ===== ЗВЁЗДЫ =====
+        (function() {
+            const bg = document.getElementById('particles-bg');
+            for (let i = 0; i < 40; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = (2 + Math.random() * 4) + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (3 + Math.random() * 5) + 's');
+                star.style.animationDelay = (Math.random() * 6) + 's';
+                bg.appendChild(star);
+            }
+            for (let i = 0; i < 3; i++) {
+                const orb = document.createElement('div');
+                orb.className = 'glow-orb';
+                orb.style.width = (150 + Math.random() * 200) + 'px';
+                orb.style.height = orb.style.width;
+                orb.style.left = (10 + Math.random() * 70) + '%';
+                orb.style.top = (10 + Math.random() * 70) + '%';
+                orb.style.background = i === 0 ? '#ff3366' : i === 1 ? '#ff7799' : '#cc2244';
+                orb.style.animationDuration = (18 + Math.random() * 12) + 's';
+                bg.appendChild(orb);
+            }
+        })();
+
+        // ===== ОНЛАЙН =====
+        function updateOnline() {
+            document.getElementById('onlineCount').textContent = Math.floor(Math.random() * 18) + 5;
+        }
+        setInterval(updateOnline, 8000);
+
+        // ===== СЧЁТЧИК СКАЧИВАНИЙ =====
+        let dlCount = 847;
+        document.getElementById('downloadCount').textContent = dlCount;
+        setInterval(() => {
+            dlCount += Math.floor(Math.random() * 3);
+            document.getElementById('downloadCount').textContent = dlCount;
+        }, 15000);
+
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        renderUserList();
+        console.log('✅ BePro запущен. Админ: admin / admin123');
+    </script>
+</body>
+</html>
