@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BePro · Discord уведомления</title>
+    <title>BePro · Статистика + Discord</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ===== СТИЛИ (полная версия) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -136,13 +137,13 @@
         }
         .grid-2col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
             margin-top: 14px;
         }
         .feature-item {
             background: rgba(255, 255, 255, 0.01);
-            padding: 16px 18px;
+            padding: 18px 20px;
             border-radius: 18px;
             border-left: 4px solid #ff3366;
             font-size: 14px;
@@ -150,7 +151,8 @@
             transition: 0.25s;
         }
         .feature-item:hover { background: rgba(255, 51, 102, 0.02); border-left-color: #ff7799; }
-        .feature-item strong { color: #ff7799; display: block; font-size: 15px; margin-bottom: 3px; }
+        .feature-item strong { color: #ff7799; display: block; font-size: 16px; margin-bottom: 4px; }
+        .feature-item .desc { color: #b38a9e; font-size: 13px; line-height: 1.4; }
 
         .btn-group { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 16px 0; }
         .btn-primary, .btn-secondary, .btn-outline {
@@ -300,7 +302,7 @@
         <header class="header">
             <div class="logo">
                 <h1><i class="fas fa-cherry"></i> BePro</h1>
-                <span>✦ уведомления в Discord ✦</span>
+                <span>✦ клиент · сервер · статистика ✦</span>
             </div>
             <div class="header-badge">
                 <a href="https://t.me/BePronet" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
@@ -319,55 +321,104 @@
             <button class="tab-btn" data-tab="features">✨ Функции</button>
             <button class="tab-btn" data-tab="register">📝 Регистрация</button>
             <button class="tab-btn" data-tab="cabinet">🔐 Кабинет</button>
-            <button class="tab-btn" data-tab="settings">⚙️ Настройки</button>
+            <button class="tab-btn" data-tab="settings" id="settingsTab">⚙️ Настройки</button>
             <button class="tab-btn" data-tab="changelog">📦 Обновления</button>
             <button class="tab-btn" data-tab="contacts">💬 Контакты</button>
         </nav>
 
+        <!-- ===== О НАС ===== -->
         <div id="home" class="tab-content active">
             <div class="glass-card">
-                <h2 style="color:#ff7799; font-size:26px; margin-bottom:10px;">🌸 BePro Client</h2>
-                <p class="sub-text"><strong>Команда Ainel</strong> — клиент для DDNet <span class="highlight-text">без читов</span>, только визуал и комфорт.</p>
+                <h2 style="color:#ff7799; font-size:26px; margin-bottom:12px;">🌸 BePro — играй по-своему</h2>
+                <p class="sub-text" style="font-size:16px;">
+                    <strong>BePro</strong> — это не просто клиент для DDNet. Это <strong>экосистема</strong>: 
+                    стильный клиент, собственный сервер и сообщество. Мы делаем упор на <span class="highlight-text">визуал, комфорт и честную игру</span>.
+                </p>
+                <p class="sub-text" style="margin-top:12px; font-size:15px;">
+                    Наш <strong>сервер</strong> поддерживает уникальные фишки клиента, а <strong>сайт</strong> — это твой личный кабинет 
+                    со статистикой, настройками и связью с командой. Никаких читов — только эстетика и удобство.
+                </p>
                 <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
                     <span class="online-counter"><span class="dot"></span> Онлайн: <span class="num" id="onlineCount">14</span></span>
                     <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">📱 Telegram</a>
+                    <a href="https://discord.gg/H5MSJmq2V" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">💬 Discord</a>
                 </div>
             </div>
         </div>
 
+        <!-- ===== ФУНКЦИИ (подробно) ===== -->
         <div id="features" class="tab-content">
             <div class="glass-card">
-                <h2 style="color:#ff7799; font-size:24px;">✨ Функции</h2>
+                <h2 style="color:#ff7799; font-size:24px;">✨ Что внутри BePro Client</h2>
+                <p class="sub-text" style="margin-bottom:8px;">Всё, чтобы выделиться и чувствовать себя комфортно.</p>
                 <div class="grid-2col">
-                    <div class="feature-item"><strong>🎨 Трейлы</strong>Следы за игроком</div>
-                    <div class="feature-item"><strong>🦋 Крылья</strong>Анимированные</div>
-                    <div class="feature-item"><strong>⚔️ Катана</strong>Косметика</div>
-                    <div class="feature-item"><strong>👼 Нимб</strong>Свечение</div>
-                    <div class="feature-item"><strong>🔮 Сферы</strong>Парящие шары</div>
-                    <div class="feature-item"><strong>🖥️ HUD</strong>Настройка экрана</div>
-                    <div class="feature-item"><strong>😄 Эмодзи</strong>На весь экран</div>
-                    <div class="feature-item"><strong>💬 Trash Talk</strong>Фразы после килла</div>
-                    <div class="feature-item"><strong>🌫️ Overlay</strong>Туман, глитч</div>
-                    <div class="feature-item"><strong>🏷️ Метка</strong>Значок в табе</div>
-                    <div class="feature-item"><strong>🎛️ Меню</strong>Масштаб, анимация</div>
-                    <div class="feature-item"><strong>⚡ FPS-режим</strong>Оптимизация</div>
+                    <div class="feature-item">
+                        <strong>🎨 Трейлы</strong>
+                        <span class="desc">Цветные следы за персонажем. Настраиваются под твой стиль.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🦋 Крылья</strong>
+                        <span class="desc">Анимированные крылья на спине. Эффектно и красиво.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>⚔️ Катана</strong>
+                        <span class="desc">Косметический меч в руке. Чистый стайл.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>👼 Нимб</strong>
+                        <span class="desc">Свечение над головой. Ты — главный.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🔮 Сферы</strong>
+                        <span class="desc">Парящие шары вокруг игрока. Добавляют магии.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🖥️ Редактор HUD</strong>
+                        <span class="desc">Полная настройка интерфейса: двигай панели, меняй виджеты.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>😄 Динамические эмодзи</strong>
+                        <span class="desc">Большие эмоции на весь экран и в чат при убийстве.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>💬 Trash Talk</strong>
+                        <span class="desc">Автоматическая фраза в чат после каждого килла. С юмором.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🌫️ Overlay-эффекты</strong>
+                        <span class="desc">Туман, глитч, тонировка — настрой атмосферу.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🏷️ Метка клиента</strong>
+                        <span class="desc">Значок в табе — видно, что ты с BePro.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>🎛️ Гибкое меню</strong>
+                        <span class="desc">Масштаб, анимация, цвета — всё под тебя.</span>
+                    </div>
+                    <div class="feature-item">
+                        <strong>⚡ Режим FPS</strong>
+                        <span class="desc">Оптимизация для слабых ПК. Играй без лагов.</span>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- ===== РЕГИСТРАЦИЯ ===== -->
         <div id="register" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📝 Регистрация</h2>
-                <p class="sub-text">Заполни форму — админ создаст аккаунт.</p>
+                <p class="sub-text">Заполни форму — админ создаст аккаунт и выдаст пароль.</p>
                 <div class="register-box">
                     <input type="text" id="regNick" placeholder="Твой ник в DDNet">
-                    <input type="text" id="regTelegram" placeholder="Твой Telegram">
+                    <input type="text" id="regTelegram" placeholder="Твой Telegram (для связи)">
                     <button class="btn-primary" id="registerBtn">📩 Отправить заявку</button>
                     <div class="register-status" id="registerStatus">⏳ Ожидай ответа админа</div>
                 </div>
             </div>
         </div>
 
+        <!-- ===== КАБИНЕТ ===== -->
         <div id="cabinet" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">🔐 Кабинет</h2>
@@ -375,7 +426,7 @@
                     <input type="text" id="loginNick" placeholder="Ник">
                     <input type="password" id="loginPass" placeholder="Пароль">
                     <button class="btn-primary" id="loginBtn">Войти</button>
-                    <div class="login-status" id="loginStatus">⏳ Введи данные от админа</div>
+                    <div class="login-status" id="loginStatus">⏳ Введи данные, выданные админом</div>
                 </div>
                 <div class="cabinet" id="cabinetContent">
                     <img id="cabinetAvatar" src="" alt="Аватар" class="avatar-preview">
@@ -391,29 +442,33 @@
                         </div>
                     </div>
                     <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:16px;">
-                        <button class="btn-secondary" onclick="alert('Скачивание начато!')">📥 Скачать клиент</button>
+                        <button class="btn-secondary" onclick="alert('Скачивание начнётся в Telegram')">📥 Скачать клиент</button>
                         <button class="btn-outline" id="logoutBtn">🚪 Выйти</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ===== НАСТРОЙКИ (видны только после входа) ===== -->
         <div id="settings" class="tab-content">
             <div class="glass-card">
-                <h2 style="color:#ff7799; font-size:24px;">⚙️ Настройки</h2>
-                <p class="sub-text">Выбери аватарку из 20 тайских стилей.</p>
+                <h2 style="color:#ff7799; font-size:24px;">⚙️ Настройки профиля</h2>
+                <p class="sub-text">Выбери аватарку из нашей коллекции.</p>
                 <div class="avatar-grid" id="avatarGrid"></div>
             </div>
         </div>
 
+        <!-- ===== ОБНОВЛЕНИЯ ===== -->
         <div id="changelog" class="tab-content">
             <div class="glass-card">
-                <h2 style="color:#ff7799; font-size:24px;">📦 Обновления</h2>
+                <h2 style="color:#ff7799; font-size:24px;">📦 История обновлений</h2>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.5.0</strong> — Полное описание клиента, сайта и сервера</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.4.0</strong> — Discord-уведомления, 20 аватарок</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.2.0</strong> — Статистика убийств/смертей</div>
             </div>
         </div>
 
+        <!-- ===== КОНТАКТЫ ===== -->
         <div id="contacts" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">💬 Контакты</h2>
@@ -464,8 +519,13 @@
         };
         function saveUsers() { localStorage.setItem('bepro_users', JSON.stringify(users)); }
 
-        // ===== 20 АВАТАРОК (тайский стиль) =====
+        // ===== 20 АВАТАРОК (с твоими ссылками) =====
         const avatars = [
+            // Твои ссылки
+            'https://i.pinimg.com/originals/6c/2b/b8/6c2bb8b7405d465a581a957944dbb8a3.gif',
+            'https://i.pinimg.com/736x/4f/7c/ef/4f7cef29e54965766815fe305d38bda6.jpg',
+            'https://i.pinimg.com/1200x/64/71/95/64719511b38d012f7005b6edf5b33d2e.jpg',
+            // Остальные из прошлого набора
             'https://i.pinimg.com/236x/8b/16/4a/8b164a5d7c5d8e4e6f7a8b9c0d1e2f3a.jpg',
             'https://i.pinimg.com/236x/a1/b2/c3/d4e5f6a7b8c9d0e1f2a3.jpg',
             'https://i.pinimg.com/236x/4c/5d/6e/7f8a9b0c1d2e3f4a5b6c.jpg',
@@ -483,9 +543,7 @@
             'https://i.pinimg.com/236x/6a/7b/8c/9d0e1f2a3b4c5d6e7f8a.jpg',
             'https://i.pinimg.com/236x/9c/8d/7e/6f5a4b3c2d1e0f9a8b7c.jpg',
             'https://i.pinimg.com/236x/3e/2f/1a/0b9c8d7e6f5a4b3c2d1e.jpg',
-            'https://i.pinimg.com/236x/5a/4b/3c/2d1e0f9a8b7c6d5e4f3a.jpg',
-            'https://i.pinimg.com/236x/8b/7a/6c/5d4e3f2a1b0c9d8e7f6a.jpg',
-            'https://i.pinimg.com/236x/1e/2f/3a/4b5c6d7e8f9a0b1c2d3e.jpg'
+            'https://i.pinimg.com/236x/5a/4b/3c/2d1e0f9a8b7c6d5e4f3a.jpg'
         ];
 
         let currentUser = null;
@@ -534,6 +592,20 @@
             });
         }
 
+        // ===== ПОКАЗЫВАТЬ НАСТРОЙКИ ТОЛЬКО ПОСЛЕ ВХОДА =====
+        function updateSettingsVisibility() {
+            const settingsTab = document.getElementById('settingsTab');
+            if (currentUser) {
+                settingsTab.style.display = 'inline-block';
+            } else {
+                settingsTab.style.display = 'none';
+                // Если вкладка настроек активна, переключаем на главную
+                if (document.getElementById('settings').classList.contains('active')) {
+                    document.querySelector('[data-tab="home"]').click();
+                }
+            }
+        }
+
         // ===== ВХОД =====
         document.getElementById('loginBtn').addEventListener('click', function() {
             const nick = document.getElementById('loginNick').value.trim();
@@ -547,6 +619,7 @@
                 updateStats(nick);
                 updateAvatar(nick);
                 renderAvatars();
+                updateSettingsVisibility();
                 status.textContent = '✅ Вход выполнен!';
                 status.style.color = '#66ddaa';
                 sendToDiscord(`🔐 **Вход в кабинет**\nПользователь: ${nick}`, 0x88bbff);
@@ -564,6 +637,7 @@
             document.getElementById('loginPass').value = '';
             document.getElementById('loginStatus').textContent = '⏳ Введи данные от админа';
             document.getElementById('loginStatus').style.color = '#b38a9e';
+            updateSettingsVisibility();
         });
 
         // ===== РЕГИСТРАЦИЯ =====
@@ -623,6 +697,8 @@
         }
         setInterval(updateOnline, 8000);
 
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        updateSettingsVisibility();
         console.log('✅ BePro запущен. Админ: admin / admin123');
     </script>
 
