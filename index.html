@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BePro · Статистика + Discord</title>
+    <title>BePro · Раздельные уведомления</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -346,7 +346,7 @@
             </div>
         </div>
 
-        <!-- ===== ФУНКЦИИ (подробно) ===== -->
+        <!-- ===== ФУНКЦИИ ===== -->
         <div id="features" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">✨ Что внутри BePro Client</h2>
@@ -449,7 +449,7 @@
             </div>
         </div>
 
-        <!-- ===== НАСТРОЙКИ (видны только после входа) ===== -->
+        <!-- ===== НАСТРОЙКИ ===== -->
         <div id="settings" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">⚙️ Настройки профиля</h2>
@@ -462,6 +462,7 @@
         <div id="changelog" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📦 История обновлений</h2>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.6.0</strong> — Раздельные уведомления в Discord (4 канала)</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.5.0</strong> — Полное описание клиента, сайта и сервера</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.4.0</strong> — Discord-уведомления, 20 аватарок</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.2.0</strong> — Статистика убийств/смертей</div>
@@ -493,12 +494,18 @@
     </div>
 
     <script>
-        // ===== WEBHOOK =====
-        const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1521761701974769748/CmbqLHwVuFc-LrnuqqIV0nQNPiNQ-Wv87XP6i_qvOOQHzAepyrYoeJo6l1K3ur8_By41';
+        // ===== ВЕБХУКИ (раздельные каналы) =====
+        const WEBHOOKS = {
+            register: 'https://discord.com/api/webhooks/1521767867597590614/mAc7-BF4jDErh9-t8FWjBPD2npu-bcYXVKg7m6QE-bqZObFmgSLCTz3pS9CXM5wyx-Ai',
+            login: 'https://discord.com/api/webhooks/1521767947801071759/t_GTOpstfTOvBFoEh3g1SRot76-llpXiI4j_bTh3PQcDc10VYMssgHFK1Nl5-qdIuOPT',
+            admin: 'https://discord.com/api/webhooks/1521768049697488916/jGtKer_ptmA94R4ZL4TGMF_OAMI8GMXj45clqQRSiHIp5k3our36Phc74pZyaY1YsUi0',
+            feedback: 'https://discord.com/api/webhooks/1521768153246597231/NKKu_KSFo9WVq-tyAl0cXxACzW4_06P_ZZ0xud90ANU44NG5wy2diBb6BvvMFRg-b4uP'
+        };
 
-        function sendToDiscord(message, color = 0xff3366) {
-            if (!DISCORD_WEBHOOK) return;
-            fetch(DISCORD_WEBHOOK, {
+        function sendToDiscord(webhookType, message, color = 0xff3366) {
+            const url = WEBHOOKS[webhookType];
+            if (!url) return;
+            fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -519,13 +526,11 @@
         };
         function saveUsers() { localStorage.setItem('bepro_users', JSON.stringify(users)); }
 
-        // ===== 20 АВАТАРОК (с твоими ссылками) =====
+        // ===== 20 АВАТАРОК =====
         const avatars = [
-            // Твои ссылки
             'https://i.pinimg.com/originals/6c/2b/b8/6c2bb8b7405d465a581a957944dbb8a3.gif',
             'https://i.pinimg.com/736x/4f/7c/ef/4f7cef29e54965766815fe305d38bda6.jpg',
             'https://i.pinimg.com/1200x/64/71/95/64719511b38d012f7005b6edf5b33d2e.jpg',
-            // Остальные из прошлого набора
             'https://i.pinimg.com/236x/8b/16/4a/8b164a5d7c5d8e4e6f7a8b9c0d1e2f3a.jpg',
             'https://i.pinimg.com/236x/a1/b2/c3/d4e5f6a7b8c9d0e1f2a3.jpg',
             'https://i.pinimg.com/236x/4c/5d/6e/7f8a9b0c1d2e3f4a5b6c.jpg',
@@ -542,8 +547,7 @@
             'https://i.pinimg.com/236x/2c/3d/4e/5f6a7b8c9d0e1f2a3b4c.jpg',
             'https://i.pinimg.com/236x/6a/7b/8c/9d0e1f2a3b4c5d6e7f8a.jpg',
             'https://i.pinimg.com/236x/9c/8d/7e/6f5a4b3c2d1e0f9a8b7c.jpg',
-            'https://i.pinimg.com/236x/3e/2f/1a/0b9c8d7e6f5a4b3c2d1e.jpg',
-            'https://i.pinimg.com/236x/5a/4b/3c/2d1e0f9a8b7c6d5e4f3a.jpg'
+            'https://i.pinimg.com/236x/3e/2f/1a/0b9c8d7e6f5a4b3c2d1e.jpg'
         ];
 
         let currentUser = null;
@@ -586,20 +590,18 @@
                     saveUsers();
                     updateAvatar(currentUser);
                     renderAvatars();
-                    sendToDiscord(`🖼️ **Смена аватарки**\nПользователь: ${currentUser}`, 0x88bbff);
+                    sendToDiscord('admin', `🖼️ **Смена аватарки**\nПользователь: ${currentUser}`, 0x88bbff);
                 };
                 grid.appendChild(img);
             });
         }
 
-        // ===== ПОКАЗЫВАТЬ НАСТРОЙКИ ТОЛЬКО ПОСЛЕ ВХОДА =====
         function updateSettingsVisibility() {
             const settingsTab = document.getElementById('settingsTab');
             if (currentUser) {
                 settingsTab.style.display = 'inline-block';
             } else {
                 settingsTab.style.display = 'none';
-                // Если вкладка настроек активна, переключаем на главную
                 if (document.getElementById('settings').classList.contains('active')) {
                     document.querySelector('[data-tab="home"]').click();
                 }
@@ -622,7 +624,7 @@
                 updateSettingsVisibility();
                 status.textContent = '✅ Вход выполнен!';
                 status.style.color = '#66ddaa';
-                sendToDiscord(`🔐 **Вход в кабинет**\nПользователь: ${nick}`, 0x88bbff);
+                sendToDiscord('login', `🔐 **Вход в кабинет**\nПользователь: ${nick}`, 0x88bbff);
             } else {
                 status.textContent = '❌ Неверный ник или пароль.';
                 status.style.color = '#ff7799';
@@ -654,7 +656,7 @@
             status.style.color = '#66ddaa';
             document.getElementById('regNick').value = '';
             document.getElementById('regTelegram').value = '';
-            sendToDiscord(`📝 **Новая заявка**\nНик: ${nick}\nTelegram: ${tg}`, 0x66ddaa);
+            sendToDiscord('register', `📝 **Новая заявка**\nНик: ${nick}\nTelegram: ${tg}`, 0x66ddaa);
             setTimeout(() => {
                 status.textContent = '⏳ Ожидай ответа админа';
                 status.style.color = '#b38a9e';
@@ -668,7 +670,7 @@
             const tg = document.getElementById('fbTelegram').value.trim();
             const msg = document.getElementById('fbMessage').value.trim();
             if (!nick || !tg || !msg) { alert('Заполни все поля!'); return; }
-            sendToDiscord(`💬 **Новое сообщение**\nОт: ${nick} (${tg})\nСообщение: ${msg}`, 0x88bbff);
+            sendToDiscord('feedback', `💬 **Новое сообщение**\nОт: ${nick} (${tg})\nСообщение: ${msg}`, 0x88bbff);
             alert('🌸 Сообщение отправлено! Мы ответим в Telegram или Discord.');
             this.reset();
         });
@@ -697,7 +699,6 @@
         }
         setInterval(updateOnline, 8000);
 
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
         updateSettingsVisibility();
         console.log('✅ BePro запущен. Админ: admin / admin123');
     </script>
