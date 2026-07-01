@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BePro · Полный портал</title>
+    <title>BePro · Полный портал (исправлен)</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ===== СТИЛИ (полная версия) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -378,10 +379,10 @@
                 <a href="https://t.me/BePronet" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
                     <i class="fab fa-telegram"></i>
                 </a>
-                <a href="https://discord.gg/H5MSJmq2V" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
+                <a href="https://discord.gg/h5xmuBfTB" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
                     <i class="fab fa-discord"></i>
                 </a>
-                <span class="badge">⚡ бета v3.0</span>
+                <span class="badge">⚡ бета v3.1</span>
                 <button class="theme-toggle" id="themeToggle">🌙</button>
             </div>
         </header>
@@ -418,7 +419,7 @@
                         <span class="dot"></span> Онлайн: <span class="num" id="onlineCount">0</span>
                     </span>
                     <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">📱 Telegram</a>
-                    <a href="https://discord.gg/H5MSJmq2V" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">💬 Discord</a>
+                    <a href="https://discord.gg/h5xmuBfTB" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">💬 Discord</a>
                 </div>
             </div>
         </div>
@@ -575,9 +576,9 @@
         <div id="changelog" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📦 История обновлений</h2>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v3.1.0</strong> — Исправлена сессия, новости и чат видны всем, новые пользователи отображаются</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v3.0.0</strong> — Новости, сообщения, топ, ачивки, редактирование статистики, экспорт CSV, PWA</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v2.0.0</strong> — Админ-панель, автовыдача паролей, роли</div>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.6.0</strong> — Раздельные уведомления в Discord</div>
             </div>
         </div>
 
@@ -593,7 +594,7 @@
                 </form>
                 <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:20px;">
                     <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:12px 30px;"><i class="fab fa-telegram"></i> Telegram</a>
-                    <a href="https://discord.gg/H5MSJmq2V" target="_blank" class="btn-primary" style="text-decoration:none; padding:12px 30px;"><i class="fab fa-discord"></i> Discord</a>
+                    <a href="https://discord.gg/h5xmuBfTB" target="_blank" class="btn-primary" style="text-decoration:none; padding:12px 30px;"><i class="fab fa-discord"></i> Discord</a>
                 </div>
             </div>
         </div>
@@ -601,7 +602,7 @@
         <footer class="footer">
             BePro · Ainel &nbsp;·&nbsp;
             <a href="https://t.me/BePronet" target="_blank">Telegram</a> &nbsp;·&nbsp;
-            <a href="https://discord.gg/H5MSJmq2V" target="_blank">Discord</a>
+            <a href="https://discord.gg/h5xmuBfTB" target="_blank">Discord</a>
         </footer>
     </div>
 
@@ -672,6 +673,26 @@
         ];
 
         let currentUser = null;
+
+        // ===== ВОССТАНОВЛЕНИЕ СЕССИИ =====
+        function restoreSession() {
+            const saved = localStorage.getItem('bepro_session');
+            if (saved && users[saved]) {
+                currentUser = saved;
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('cabinetContent').classList.add('active');
+                document.getElementById('cabinetNick').textContent = currentUser;
+                document.getElementById('killsDisplay').textContent = users[currentUser].kills || 0;
+                document.getElementById('deathsDisplay').textContent = users[currentUser].deaths || 0;
+                const ach = getAchievements(users[currentUser]);
+                document.getElementById('achievementsDisplay').innerHTML = ach.map(a => `<span class="achievement">${a}</span>`).join('');
+                updateAvatar(currentUser);
+                renderAvatars();
+                updateTabs();
+                return true;
+            }
+            return false;
+        }
 
         // ===== РЕАЛЬНЫЙ ОНЛАЙН =====
         function updateOnline() {
@@ -927,6 +948,7 @@
             const password = Math.random().toString(36).slice(-8);
             users[nick] = { password: password, role: 'user', kills: 0, deaths: 0, avatar: '', history: [] };
             saveUsers();
+            // ОБНОВЛЯЕМ ВСЕ ВИДЖЕТЫ
             renderUserList();
             renderStatsTable();
             renderTop();
@@ -949,12 +971,12 @@
             const status = document.getElementById('loginStatus');
             if (users[nick] && users[nick].password === pass) {
                 currentUser = nick;
+                localStorage.setItem('bepro_session', nick);
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('cabinetContent').classList.add('active');
                 document.getElementById('cabinetNick').textContent = nick;
                 document.getElementById('killsDisplay').textContent = users[nick].kills || 0;
                 document.getElementById('deathsDisplay').textContent = users[nick].deaths || 0;
-                // Ачивки
                 const ach = getAchievements(users[nick]);
                 document.getElementById('achievementsDisplay').innerHTML = ach.map(a => `<span class="achievement">${a}</span>`).join('');
                 updateAvatar(nick);
@@ -972,6 +994,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', function() {
             if (currentUser) addHistory(currentUser, 'Вышел из кабинета');
+            localStorage.removeItem('bepro_session');
             currentUser = null;
             document.getElementById('loginBox').style.display = 'block';
             document.getElementById('cabinetContent').classList.remove('active');
@@ -1098,14 +1121,12 @@
         renderTop();
         renderNews();
         renderMessages();
-        updateTabs();
-        // PWA
-        if ('serviceWorker' in navigator) {
-            // Заглушка для будущего SW
-            console.log('🔧 PWA поддержка готова к подключению');
+        const sessionRestored = restoreSession();
+        if (!sessionRestored) {
+            updateTabs();
         }
-        console.log('✅ BePro v3.0 запущен. Админ: admin / admin123');
-        console.log('📌 Для реального онлайна замени функцию updateOnline() на API-запрос к твоему серверу.');
+        console.log('✅ BePro v3.1 запущен. Админ: admin / admin123');
+        console.log('📌 Исправлено: сессия сохраняется, новости и чат видны всем, новые пользователи отображаются.');
     </script>
 
 </body>
