@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BePro · Раздельные уведомления</title>
+    <title>BePro · Полная админ-панель</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== СТИЛИ (полная версия) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -155,7 +154,7 @@
         .feature-item .desc { color: #b38a9e; font-size: 13px; line-height: 1.4; }
 
         .btn-group { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 16px 0; }
-        .btn-primary, .btn-secondary, .btn-outline {
+        .btn-primary, .btn-secondary, .btn-outline, .btn-danger {
             padding: 14px 36px;
             border-radius: 60px;
             font-weight: 700;
@@ -176,6 +175,8 @@
         .btn-secondary:hover { background: rgba(255, 51, 102, 0.04); border-color: #ff3366; }
         .btn-outline { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.04); color: #b38a9e; }
         .btn-outline:hover { border-color: #ff7799; color: #ff7799; }
+        .btn-danger { background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.3); color: #ff5555; }
+        .btn-danger:hover { background: rgba(255, 0, 0, 0.25); }
 
         .sub-text { color: #b38a9e; font-size: 15px; line-height: 1.6; }
         .sub-text strong { color: #ff7799; }
@@ -183,7 +184,8 @@
         .online-counter {
             display: inline-flex; align-items: center; gap: 12px;
             background: rgba(255, 255, 255, 0.01);
-            padding: 10px 24px; border-radius: 60px;
+            padding: 10px 24px;
+            border-radius: 60px;
             border: 1px solid rgba(255, 51, 102, 0.04);
             font-size: 14px; color: #b38a9e;
         }
@@ -191,25 +193,25 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
         .online-counter .num { color: #ff7799; font-weight: 700; font-size: 18px; }
 
-        .register-box, .login-box {
+        .register-box, .login-box, .admin-panel-box {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 51, 102, 0.06);
             border-radius: 24px;
             padding: 24px 28px;
-            max-width: 500px;
+            max-width: 600px;
             margin: 16px auto;
             text-align: center;
         }
-        .register-box input, .login-box input {
+        .register-box input, .login-box input, .admin-panel-box input, .admin-panel-box select {
             width: 100%; padding: 14px 20px; border-radius: 60px;
             border: 1px solid rgba(255, 51, 102, 0.06);
             background: rgba(255, 255, 255, 0.01);
             color: #f0e6ec; font-size: 15px; outline: none;
             margin-bottom: 12px; font-family: inherit;
         }
-        .register-box input:focus, .login-box input:focus { border-color: #ff3366; }
-        .register-box .btn-primary, .login-box .btn-primary { width: 100%; border: none; }
-        .register-status, .login-status { margin-top: 12px; font-size: 14px; color: #b38a9e; }
+        .register-box input:focus, .login-box input:focus, .admin-panel-box input:focus { border-color: #ff3366; }
+        .register-box .btn-primary, .login-box .btn-primary, .admin-panel-box .btn-primary { width: 100%; border: none; }
+        .register-status, .login-status, .admin-status { margin-top: 12px; font-size: 14px; color: #b38a9e; }
 
         .cabinet { display: none; }
         .cabinet.active { display: block; }
@@ -274,6 +276,31 @@
             background: #222;
         }
 
+        .user-list {
+            margin-top: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ff3366;
+            color: #dcc8d4;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .user-item .role {
+            font-size: 12px; padding: 2px 12px; border-radius: 30px;
+        }
+        .user-item .role.admin { background: rgba(255, 51, 102, 0.15); color: #ff7799; }
+        .user-item .role.helper { background: rgba(255, 200, 50, 0.15); color: #ffcc55; }
+        .user-item .role.user { background: rgba(100, 150, 255, 0.1); color: #88bbff; }
+
         .footer {
             margin-top: 40px; text-align: center; font-size: 13px;
             color: #5a4a52; border-top: 1px solid rgba(255, 51, 102, 0.03);
@@ -288,8 +315,8 @@
             .tabs { border-radius: 30px; padding: 6px 8px; gap: 2px; }
             .tab-btn { padding: 8px 10px; font-size: 11px; }
             .glass-card { padding: 18px 14px; }
-            .btn-primary, .btn-secondary, .btn-outline { min-width: unset; }
-            .register-box, .login-box { padding: 16px; }
+            .btn-primary, .btn-secondary, .btn-outline, .btn-danger { min-width: unset; }
+            .register-box, .login-box, .admin-panel-box { padding: 16px; }
             .stats-display { gap: 16px; }
             .avatar-grid { max-height: 250px; }
         }
@@ -302,7 +329,7 @@
         <header class="header">
             <div class="logo">
                 <h1><i class="fas fa-cherry"></i> BePro</h1>
-                <span>✦ клиент · сервер · статистика ✦</span>
+                <span>✦ полная админ-панель ✦</span>
             </div>
             <div class="header-badge">
                 <a href="https://t.me/BePronet" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
@@ -322,6 +349,7 @@
             <button class="tab-btn" data-tab="register">📝 Регистрация</button>
             <button class="tab-btn" data-tab="cabinet">🔐 Кабинет</button>
             <button class="tab-btn" data-tab="settings" id="settingsTab">⚙️ Настройки</button>
+            <button class="tab-btn" data-tab="admin" id="adminTab">👑 Админ-панель</button>
             <button class="tab-btn" data-tab="changelog">📦 Обновления</button>
             <button class="tab-btn" data-tab="contacts">💬 Контакты</button>
         </nav>
@@ -339,7 +367,9 @@
                     со статистикой, настройками и связью с командой. Никаких читов — только эстетика и удобство.
                 </p>
                 <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
-                    <span class="online-counter"><span class="dot"></span> Онлайн: <span class="num" id="onlineCount">14</span></span>
+                    <span class="online-counter">
+                        <span class="dot"></span> Онлайн: <span class="num" id="onlineCount">0</span>
+                    </span>
                     <a href="https://t.me/BePronet" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">📱 Telegram</a>
                     <a href="https://discord.gg/H5MSJmq2V" target="_blank" class="btn-secondary" style="text-decoration:none; padding:10px 28px;">💬 Discord</a>
                 </div>
@@ -352,68 +382,32 @@
                 <h2 style="color:#ff7799; font-size:24px;">✨ Что внутри BePro Client</h2>
                 <p class="sub-text" style="margin-bottom:8px;">Всё, чтобы выделиться и чувствовать себя комфортно.</p>
                 <div class="grid-2col">
-                    <div class="feature-item">
-                        <strong>🎨 Трейлы</strong>
-                        <span class="desc">Цветные следы за персонажем. Настраиваются под твой стиль.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🦋 Крылья</strong>
-                        <span class="desc">Анимированные крылья на спине. Эффектно и красиво.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>⚔️ Катана</strong>
-                        <span class="desc">Косметический меч в руке. Чистый стайл.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>👼 Нимб</strong>
-                        <span class="desc">Свечение над головой. Ты — главный.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🔮 Сферы</strong>
-                        <span class="desc">Парящие шары вокруг игрока. Добавляют магии.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🖥️ Редактор HUD</strong>
-                        <span class="desc">Полная настройка интерфейса: двигай панели, меняй виджеты.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>😄 Динамические эмодзи</strong>
-                        <span class="desc">Большие эмоции на весь экран и в чат при убийстве.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>💬 Trash Talk</strong>
-                        <span class="desc">Автоматическая фраза в чат после каждого килла. С юмором.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🌫️ Overlay-эффекты</strong>
-                        <span class="desc">Туман, глитч, тонировка — настрой атмосферу.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🏷️ Метка клиента</strong>
-                        <span class="desc">Значок в табе — видно, что ты с BePro.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>🎛️ Гибкое меню</strong>
-                        <span class="desc">Масштаб, анимация, цвета — всё под тебя.</span>
-                    </div>
-                    <div class="feature-item">
-                        <strong>⚡ Режим FPS</strong>
-                        <span class="desc">Оптимизация для слабых ПК. Играй без лагов.</span>
-                    </div>
+                    <div class="feature-item"><strong>🎨 Трейлы</strong><span class="desc">Цветные следы за персонажем.</span></div>
+                    <div class="feature-item"><strong>🦋 Крылья</strong><span class="desc">Анимированные крылья на спине.</span></div>
+                    <div class="feature-item"><strong>⚔️ Катана</strong><span class="desc">Косметический меч в руке.</span></div>
+                    <div class="feature-item"><strong>👼 Нимб</strong><span class="desc">Свечение над головой.</span></div>
+                    <div class="feature-item"><strong>🔮 Сферы</strong><span class="desc">Парящие шары вокруг игрока.</span></div>
+                    <div class="feature-item"><strong>🖥️ Редактор HUD</strong><span class="desc">Полная настройка интерфейса.</span></div>
+                    <div class="feature-item"><strong>😄 Динамические эмодзи</strong><span class="desc">Эмоции на весь экран и в чат.</span></div>
+                    <div class="feature-item"><strong>💬 Trash Talk</strong><span class="desc">Автоматическая фраза после килла.</span></div>
+                    <div class="feature-item"><strong>🌫️ Overlay-эффекты</strong><span class="desc">Туман, глитч, тонировка.</span></div>
+                    <div class="feature-item"><strong>🏷️ Метка клиента</strong><span class="desc">Значок в табе — ты с BePro.</span></div>
+                    <div class="feature-item"><strong>🎛️ Гибкое меню</strong><span class="desc">Масштаб, анимация, цвета.</span></div>
+                    <div class="feature-item"><strong>⚡ Режим FPS</strong><span class="desc">Оптимизация для слабых ПК.</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- ===== РЕГИСТРАЦИЯ ===== -->
+        <!-- ===== РЕГИСТРАЦИЯ (с автовыдачей пароля) ===== -->
         <div id="register" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📝 Регистрация</h2>
-                <p class="sub-text">Заполни форму — админ создаст аккаунт и выдаст пароль.</p>
+                <p class="sub-text">Заполни форму — пароль будет выдан автоматически.</p>
                 <div class="register-box">
                     <input type="text" id="regNick" placeholder="Твой ник в DDNet">
                     <input type="text" id="regTelegram" placeholder="Твой Telegram (для связи)">
-                    <button class="btn-primary" id="registerBtn">📩 Отправить заявку</button>
-                    <div class="register-status" id="registerStatus">⏳ Ожидай ответа админа</div>
+                    <button class="btn-primary" id="registerBtn">📩 Зарегистрироваться</button>
+                    <div class="register-status" id="registerStatus">⏳ Введи данные</div>
                 </div>
             </div>
         </div>
@@ -426,20 +420,14 @@
                     <input type="text" id="loginNick" placeholder="Ник">
                     <input type="password" id="loginPass" placeholder="Пароль">
                     <button class="btn-primary" id="loginBtn">Войти</button>
-                    <div class="login-status" id="loginStatus">⏳ Введи данные, выданные админом</div>
+                    <div class="login-status" id="loginStatus">⏳ Введи свои данные</div>
                 </div>
                 <div class="cabinet" id="cabinetContent">
                     <img id="cabinetAvatar" src="" alt="Аватар" class="avatar-preview">
                     <p style="color:#ff7799; font-size:18px;">✅ Добро пожаловать, <span id="cabinetNick">Ainel</span>!</p>
                     <div class="stats-display">
-                        <div class="stat-item">
-                            <div class="number kills" id="killsDisplay">0</div>
-                            <div class="label">Убийств</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="number deaths" id="deathsDisplay">0</div>
-                            <div class="label">Смертей</div>
-                        </div>
+                        <div class="stat-item"><div class="number kills" id="killsDisplay">0</div><div class="label">Убийств</div></div>
+                        <div class="stat-item"><div class="number deaths" id="deathsDisplay">0</div><div class="label">Смертей</div></div>
                     </div>
                     <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:16px;">
                         <button class="btn-secondary" onclick="alert('Скачивание начнётся в Telegram')">📥 Скачать клиент</button>
@@ -458,14 +446,41 @@
             </div>
         </div>
 
+        <!-- ===== АДМИН-ПАНЕЛЬ ===== -->
+        <div id="admin" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">👑 Админ-панель</h2>
+                <p class="sub-text">Управление пользователями: добавление, роли, удаление.</p>
+
+                <!-- Добавление пользователя -->
+                <div class="admin-panel-box">
+                    <h3 style="color:#b38a9e; font-size:16px;">➕ Добавить пользователя</h3>
+                    <input type="text" id="newUserNick" placeholder="Ник">
+                    <input type="text" id="newUserPass" placeholder="Пароль">
+                    <select id="newUserRole">
+                        <option value="user">Игрок</option>
+                        <option value="helper">Хелпер</option>
+                        <option value="admin">Админ</option>
+                    </select>
+                    <button class="btn-primary" id="addUserBtn">Добавить</button>
+                    <div class="admin-status" id="addUserStatus"></div>
+                </div>
+
+                <!-- Список пользователей -->
+                <div>
+                    <h3 style="color:#b38a9e; font-size:16px;">👥 Все пользователи</h3>
+                    <div class="user-list" id="userList"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- ===== ОБНОВЛЕНИЯ ===== -->
         <div id="changelog" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📦 История обновлений</h2>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.6.0</strong> — Раздельные уведомления в Discord (4 канала)</div>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v2.0.0</strong> — Админ-панель, автовыдача паролей, роли, реальный онлайн</div>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.6.0</strong> — Раздельные уведомления в Discord</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.5.0</strong> — Полное описание клиента, сайта и сервера</div>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.4.0</strong> — Discord-уведомления, 20 аватарок</div>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.2.0</strong> — Статистика убийств/смертей</div>
             </div>
         </div>
 
@@ -494,7 +509,7 @@
     </div>
 
     <script>
-        // ===== ВЕБХУКИ (раздельные каналы) =====
+        // ===== ВЕБХУКИ =====
         const WEBHOOKS = {
             register: 'https://discord.com/api/webhooks/1521767867597590614/mAc7-BF4jDErh9-t8FWjBPD2npu-bcYXVKg7m6QE-bqZObFmgSLCTz3pS9CXM5wyx-Ai',
             login: 'https://discord.com/api/webhooks/1521767947801071759/t_GTOpstfTOvBFoEh3g1SRot76-llpXiI4j_bTh3PQcDc10VYMssgHFK1Nl5-qdIuOPT',
@@ -521,12 +536,11 @@
 
         // ===== ПОЛЬЗОВАТЕЛИ =====
         let users = JSON.parse(localStorage.getItem('bepro_users')) || {
-            'admin': { password: 'admin123', role: 'admin', kills: 0, deaths: 0, avatar: '' },
-            'Ainel': { password: 'bepro2026', role: 'user', kills: 0, deaths: 0, avatar: '' }
+            'admin': { password: 'admin123', role: 'admin', kills: 0, deaths: 0, avatar: '' }
         };
         function saveUsers() { localStorage.setItem('bepro_users', JSON.stringify(users)); }
 
-        // ===== 20 АВАТАРОК =====
+        // ===== АВАТАРКИ =====
         const avatars = [
             'https://i.pinimg.com/originals/6c/2b/b8/6c2bb8b7405d465a581a957944dbb8a3.gif',
             'https://i.pinimg.com/736x/4f/7c/ef/4f7cef29e54965766815fe305d38bda6.jpg',
@@ -552,6 +566,17 @@
 
         let currentUser = null;
 
+        // ===== РЕАЛЬНЫЙ ОНЛАЙН =====
+        function updateOnline() {
+            // Заглушка — показывает случайное число от 0 до 20
+            // Замени на свой API-запрос к серверу DDNet
+            const count = Math.floor(Math.random() * 20);
+            document.getElementById('onlineCount').textContent = count;
+        }
+        setInterval(updateOnline, 10000);
+        updateOnline();
+
+        // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
         function updateStats(nick) {
             const user = users[nick];
             if (!user) return;
@@ -559,6 +584,7 @@
             document.getElementById('deathsDisplay').textContent = user.deaths || 0;
         }
 
+        // ===== АВАТАРКИ =====
         function updateAvatar(nick) {
             const user = users[nick];
             if (!user) return;
@@ -596,8 +622,60 @@
             });
         }
 
-        function updateSettingsVisibility() {
+        // ===== АДМИН-ПАНЕЛЬ =====
+        function renderUserList() {
+            const container = document.getElementById('userList');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let nick in users) {
+                const u = users[nick];
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                const roleName = u.role === 'admin' ? 'Админ' : u.role === 'helper' ? 'Хелпер' : 'Игрок';
+                div.innerHTML = `
+                    <span><strong>${nick}</strong> <span class="role ${u.role}">${roleName}</span> (${u.kills || 0}K / ${u.deaths || 0}D)</span>
+                    <div>
+                        <button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="changeRole('${nick}')">Роль</button>
+                        ${nick !== 'admin' ? `<button class="btn-danger" style="padding:4px 12px; font-size:12px; min-width:auto;" onclick="deleteUser('${nick}')">Удалить</button>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+        }
+
+        function deleteUser(nick) {
+            if (nick === 'admin') { alert('Нельзя удалить главного админа!'); return; }
+            if (confirm(`Удалить пользователя ${nick}?`)) {
+                delete users[nick];
+                saveUsers();
+                renderUserList();
+                sendToDiscord('admin', `🗑️ **Удалён пользователь**\nНик: ${nick}`, 0xff5555);
+            }
+        }
+
+        function changeRole(nick) {
+            if (nick === 'admin') { alert('Нельзя изменить роль главного админа!'); return; }
+            const currentRole = users[nick].role;
+            const roles = ['user', 'helper', 'admin'];
+            const nextIndex = (roles.indexOf(currentRole) + 1) % roles.length;
+            users[nick].role = roles[nextIndex];
+            saveUsers();
+            renderUserList();
+            sendToDiscord('admin', `🔄 **Смена роли**\nПользователь: ${nick}\nНовая роль: ${roles[nextIndex]}`, 0xffaa55);
+        }
+
+        // ===== ВКЛАДКИ (скрываем админку для не-админов) =====
+        function updateTabs() {
+            const adminTab = document.getElementById('adminTab');
             const settingsTab = document.getElementById('settingsTab');
+            if (currentUser && users[currentUser] && users[currentUser].role === 'admin') {
+                adminTab.style.display = 'inline-block';
+            } else {
+                adminTab.style.display = 'none';
+                if (document.getElementById('admin').classList.contains('active')) {
+                    document.querySelector('[data-tab="home"]').click();
+                }
+            }
             if (currentUser) {
                 settingsTab.style.display = 'inline-block';
             } else {
@@ -607,6 +685,37 @@
                 }
             }
         }
+
+        // ===== РЕГИСТРАЦИЯ (с автовыдачей пароля) =====
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            const nick = document.getElementById('regNick').value.trim();
+            const tg = document.getElementById('regTelegram').value.trim();
+            const status = document.getElementById('registerStatus');
+            if (nick.length < 2 || tg.length < 2) {
+                status.textContent = '❌ Заполни оба поля.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            if (users[nick]) {
+                status.textContent = '❌ Пользователь с таким ником уже существует.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            // Генерация пароля
+            const password = Math.random().toString(36).slice(-8);
+            users[nick] = { password: password, role: 'user', kills: 0, deaths: 0, avatar: '' };
+            saveUsers();
+            renderUserList();
+            status.textContent = `✅ Аккаунт создан! Твой пароль: ${password}`;
+            status.style.color = '#66ddaa';
+            document.getElementById('regNick').value = '';
+            document.getElementById('regTelegram').value = '';
+            sendToDiscord('register', `📝 **Новая регистрация**\nНик: ${nick}\nTelegram: ${tg}\nПароль: ${password}`, 0x66ddaa);
+            setTimeout(() => {
+                status.textContent = '⏳ Используй пароль для входа в кабинет';
+                status.style.color = '#b38a9e';
+            }, 8000);
+        });
 
         // ===== ВХОД =====
         document.getElementById('loginBtn').addEventListener('click', function() {
@@ -621,7 +730,7 @@
                 updateStats(nick);
                 updateAvatar(nick);
                 renderAvatars();
-                updateSettingsVisibility();
+                updateTabs();
                 status.textContent = '✅ Вход выполнен!';
                 status.style.color = '#66ddaa';
                 sendToDiscord('login', `🔐 **Вход в кабинет**\nПользователь: ${nick}`, 0x88bbff);
@@ -637,30 +746,35 @@
             document.getElementById('cabinetContent').classList.remove('active');
             document.getElementById('loginNick').value = '';
             document.getElementById('loginPass').value = '';
-            document.getElementById('loginStatus').textContent = '⏳ Введи данные от админа';
+            document.getElementById('loginStatus').textContent = '⏳ Введи свои данные';
             document.getElementById('loginStatus').style.color = '#b38a9e';
-            updateSettingsVisibility();
+            updateTabs();
         });
 
-        // ===== РЕГИСТРАЦИЯ =====
-        document.getElementById('registerBtn').addEventListener('click', function() {
-            const nick = document.getElementById('regNick').value.trim();
-            const tg = document.getElementById('regTelegram').value.trim();
-            const status = document.getElementById('registerStatus');
-            if (nick.length < 2 || tg.length < 2) {
-                status.textContent = '❌ Заполни оба поля.';
+        // ===== АДМИН-ПАНЕЛЬ: ДОБАВЛЕНИЕ =====
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            const nick = document.getElementById('newUserNick').value.trim();
+            const pass = document.getElementById('newUserPass').value.trim();
+            const role = document.getElementById('newUserRole').value;
+            const status = document.getElementById('addUserStatus');
+            if (!nick || !pass) {
+                status.textContent = '❌ Заполни ник и пароль.';
                 status.style.color = '#ff7799';
                 return;
             }
-            status.textContent = '✅ Заявка отправлена! Админ создаст аккаунт.';
+            if (users[nick]) {
+                status.textContent = '❌ Пользователь уже существует.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            users[nick] = { password: pass, role: role, kills: 0, deaths: 0, avatar: '' };
+            saveUsers();
+            renderUserList();
+            status.textContent = '✅ Пользователь добавлен!';
             status.style.color = '#66ddaa';
-            document.getElementById('regNick').value = '';
-            document.getElementById('regTelegram').value = '';
-            sendToDiscord('register', `📝 **Новая заявка**\nНик: ${nick}\nTelegram: ${tg}`, 0x66ddaa);
-            setTimeout(() => {
-                status.textContent = '⏳ Ожидай ответа админа';
-                status.style.color = '#b38a9e';
-            }, 5000);
+            document.getElementById('newUserNick').value = '';
+            document.getElementById('newUserPass').value = '';
+            sendToDiscord('admin', `➕ **Добавлен пользователь**\nНик: ${nick}\nРоль: ${role}`, 0x66ddaa);
         });
 
         // ===== ФОРМА =====
@@ -693,14 +807,12 @@
             this.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
         });
 
-        // ===== ОНЛАЙН =====
-        function updateOnline() {
-            document.getElementById('onlineCount').textContent = Math.floor(Math.random() * 18) + 5;
-        }
-        setInterval(updateOnline, 8000);
-
-        updateSettingsVisibility();
+        // ===== ИНИЦИАЛИЗАЦИЯ =====
+        renderUserList();
+        updateTabs();
         console.log('✅ BePro запущен. Админ: admin / admin123');
+        console.log('📌 Для реального онлайна замени функцию updateOnline() на API-запрос к твоему серверу.');
+        console.log('📌 Для автовыдачи ролей в Discord настрой бота на сервере.');
     </script>
 
 </body>
