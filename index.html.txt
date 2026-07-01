@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BePro Client — вайфу-стиль</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: #0b0a0c;
+            color: #f0e6ec;
+            display: flex;
+            justify-content: center;
+            padding: 30px 15px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(20, 16, 22, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 30px 30px 35px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 51, 102, 0.25);
+            box-shadow: 0 20px 60px rgba(255, 51, 102, 0.12), 0 0 80px rgba(255, 51, 102, 0.04);
+        }
+        /* --- Шапка --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 51, 102, 0.15);
+            padding-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .logo h1 {
+            font-size: 38px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff3366, #ff7799);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(255, 51, 102, 0.25);
+            letter-spacing: 1px;
+        }
+        .logo span {
+            font-size: 13px;
+            color: #b38a9e;
+            display: block;
+            -webkit-text-fill-color: #b38a9e;
+        }
+        .badge {
+            background: rgba(255, 51, 102, 0.12);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 51, 102, 0.3);
+            color: #ff7799;
+            backdrop-filter: blur(4px);
+        }
+
+        /* --- Вкладки --- */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin: 22px 0 20px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255, 51, 102, 0.1);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #b38a9e;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .tab-btn:hover {
+            background: rgba(255, 51, 102, 0.08);
+            color: #f0e6ec;
+        }
+        .tab-btn.active {
+            background: rgba(255, 51, 102, 0.18);
+            color: #ff7799;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        /* --- Контент --- */
+        .tab-content {
+            display: none;
+            animation: fade 0.35s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fade {
+            0% { opacity: 0.3; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .sub {
+            color: #c9b1bf;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .sub strong {
+            color: #ff7799;
+        }
+
+        /* --- Карточки функций --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 16px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 51, 102, 0.08);
+            transition: 0.25s;
+            font-size: 14px;
+            color: #dcc8d4;
+        }
+        .feature-card:hover {
+            border-color: rgba(255, 51, 102, 0.25);
+            background: rgba(255, 51, 102, 0.04);
+        }
+        .feature-card strong {
+            color: #ff7799;
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        /* --- Блок цены / бета --- */
+        .price-box {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 22px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 51, 102, 0.12);
+            text-align: center;
+            margin: 18px 0;
+        }
+        .price {
+            font-size: 38px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .price small {
+            font-size: 16px;
+            color: #b38a9e;
+        }
+        .price .soon {
+            color: #ff7799;
+            font-size: 14px;
+            background: rgba(255, 51, 102, 0.08);
+            padding: 2px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* --- Кнопки --- */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .btn-primary, .btn-secondary {
+            padding: 14px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff3366, #cc2244);
+            color: #fff;
+            box-shadow: 0 6px 24px rgba(255, 51, 102, 0.3);
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 32px rgba(255, 51, 102, 0.45);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            border: 1.5px solid rgba(255, 51, 102, 0.2);
+            color: #dcc8d4;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 51, 102, 0.06);
+            border-color: #ff3366;
+        }
+
+        /* --- Ссылка на Telegram --- */
+        .tg-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(6px);
+            padding: 12px 26px;
+            border-radius: 60px;
+            color: #ff7799;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid rgba(255, 51, 102, 0.12);
+            transition: 0.25s;
+            margin: 6px 0;
+        }
+        .tg-link:hover {
+            background: rgba(255, 51, 102, 0.06);
+            border-color: #ff3366;
+        }
+
+        /* --- Блюр-блок для бета --- */
+        .beta-block {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 22px;
+            border-radius: 24px;
+            border: 1px dashed rgba(255, 51, 102, 0.15);
+            margin: 12px 0;
+        }
+        .beta-block input {
+            width: 65%;
+            padding: 12px 18px;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 51, 102, 0.15);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+        .beta-block input:focus {
+            border-color: #ff3366;
+        }
+        .beta-block button {
+            padding: 12px 22px;
+            border-radius: 60px;
+            border: none;
+            background: rgba(255, 51, 102, 0.12);
+            color: #ff7799;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+        }
+        .beta-block button:hover {
+            background: #ff3366;
+            color: #fff;
+        }
+
+        .footer {
+            margin-top: 28px;
+            font-size: 13px;
+            color: #7a6a74;
+            border-top: 1px solid rgba(255, 51, 102, 0.06);
+            padding-top: 18px;
+            text-align: center;
+        }
+        .footer a {
+            color: #ff7799;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 14px; }
+            .logo h1 { font-size: 28px; }
+            .tab-btn { padding: 8px 14px; font-size: 13px; }
+            .beta-block input { width: 100%; margin-bottom: 10px; }
+            .beta-block button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ШАПКА -->
+    <div class="header">
+        <div class="logo">
+            <h1>🌸 BePro</h1>
+            <span>кастомный клиент для DDNet · вайфу-эстетика</span>
+        </div>
+        <div class="badge">⚡ бета v1.0</div>
+    </div>
+
+    <!-- ВКЛАДКИ -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="home">Главная</button>
+        <button class="tab-btn" data-tab="features">Функции</button>
+        <button class="tab-btn" data-tab="beta">Купить + бета</button>
+        <button class="tab-btn" data-tab="contacts">Контакты</button>
+    </div>
+
+    <!-- ======= ГЛАВНАЯ ======= -->
+    <div id="home" class="tab-content active">
+        <div class="sub">
+            Визуал, HUD, эмоции и производительность — <strong>без читов</strong>. Только комфорт и стиль.
+        </div>
+
+        <div class="price-box">
+            <div class="price">Бесплатно <small>/ бета</small></div>
+            <div class="soon">🌸 релиз скоро</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary">📥 Скачать бета-версию</button>
+            <button class="btn-secondary">💎 Поддержать разработку</button>
+        </div>
+
+        <div style="text-align:center; margin-top:16px;">
+            <a href="https://t.me/BePronet" target="_blank" class="tg-link">📱 Наш Telegram-канал</a>
+        </div>
+    </div>
+
+    <!-- ======= ФУНКЦИИ ======= -->
+    <div id="features" class="tab-content">
+        <div class="sub">Все возможности BePro Client — настрой внешний вид под себя</div>
+        <div class="features-grid">
+            <div class="feature-card"><strong>🎨 Трейлы, крылья, катана</strong>Косметика для персонажа</div>
+            <div class="feature-card"><strong>🖥️ Редактор HUD</strong>Панели, виджеты, гифки</div>
+            <div class="feature-card"><strong>😄 Динамические эмодзи</strong>Эмоции на экране и в чат</div>
+            <div class="feature-card"><strong>💬 Trash Talk</strong>Фразы после килла</div>
+            <div class="feature-card"><strong>✨ Overlay-эффекты</strong>Туман, глитч, тонировка</div>
+            <div class="feature-card"><strong>🏷️ Метка клиента</strong>Иконка у ника в табе</div>
+            <div class="feature-card"><strong>🎛️ Настройки меню</strong>Масштаб, анимация, цвет</div>
+            <div class="feature-card"><strong>⚡ Производительность</strong>Оптимизация для FPS</div>
+        </div>
+    </div>
+
+    <!-- ======= КУПИТЬ + БЕТА ======= -->
+    <div id="beta" class="tab-content">
+        <div class="sub">🌸 Получи доступ к бета-версии или приобрети полную</div>
+
+        <div class="price-box">
+            <div class="price">990 ₽ <small>/ полная версия</small></div>
+            <div class="soon">⏳ бета-тест — скоро</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary">💳 Купить сейчас</button>
+            <button class="btn-secondary">📥 Скачать бета (ожидайте)</button>
+        </div>
+
+        <div class="beta-block">
+            <input type="email" placeholder="Твой email для уведомлений">
+            <button>Подписаться</button>
+            <div style="font-size:12px; color:#b38a9e; margin-top:12px;">Получай новости о бета-тесте и релизе</div>
+        </div>
+
+        <div style="text-align:center; margin-top:14px;">
+            <a href="https://t.me/BePronet" target="_blank" class="tg-link">📱 Присоединиться в Telegram</a>
+        </div>
+    </div>
+
+    <!-- ======= КОНТАКТЫ ======= -->
+    <div id="contacts" class="tab-content">
+        <div class="sub">Свяжись с нами</div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin:16px 0;">
+            <a href="https://t.me/BePronet" target="_blank" class="tg-link" style="justify-content:center;">📱 Telegram-канал</a>
+            <a href="#" class="tg-link" style="justify-content:center;">💬 Discord (скоро)</a>
+            <a href="#" class="tg-link" style="justify-content:center;">🐙 GitHub</a>
+        </div>
+        <div style="background:rgba(255,255,255,0.02); backdrop-filter:blur(6px); padding:16px; border-radius:20px; border:1px solid rgba(255,51,102,0.06); text-align:center; color:#b38a9e;">
+            По вопросам: <strong style="color:#ff7799;">bepro@team.com</strong>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ -->
+    <div class="footer">
+        BePro Client — разработано командой Ainel &nbsp;·&nbsp;
+        <a href="https://t.me/BePronet" target="_blank">Telegram</a>
+    </div>
+
+</div>
+
+<!-- СКРИПТ ВКЛАДОК -->
+<script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            tabs.forEach(b => b.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
