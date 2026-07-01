@@ -33,6 +33,7 @@
         }
         body.light .badge { background: rgba(200, 70, 100, 0.08); color: #cc2244; }
         body.light .footer a { color: #cc2244; }
+        body.light .stats-table th { color: #cc2244; }
 
         .main-wrapper {
             max-width: 1200px;
@@ -301,6 +302,26 @@
         .user-item .role.helper { background: rgba(255, 200, 50, 0.15); color: #ffcc55; }
         .user-item .role.user { background: rgba(100, 150, 255, 0.1); color: #88bbff; }
 
+        /* СТАТИСТИКА (таблица) */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        .stats-table th {
+            color: #ff7799;
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(255, 51, 102, 0.1);
+            font-weight: 700;
+        }
+        .stats-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: #dcc8d4;
+        }
+        .stats-table tr:hover td { background: rgba(255, 51, 102, 0.02); }
+
         .footer {
             margin-top: 40px; text-align: center; font-size: 13px;
             color: #5a4a52; border-top: 1px solid rgba(255, 51, 102, 0.03);
@@ -319,6 +340,7 @@
             .register-box, .login-box, .admin-panel-box { padding: 16px; }
             .stats-display { gap: 16px; }
             .avatar-grid { max-height: 250px; }
+            .stats-table th, .stats-table td { padding: 6px 8px; font-size: 13px; }
         }
     </style>
 </head>
@@ -338,7 +360,7 @@
                 <a href="https://discord.gg/H5MSJmq2V" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
                     <i class="fab fa-discord"></i>
                 </a>
-                <span class="badge">⚡ бета v1.0</span>
+                <span class="badge">⚡ бета v2.0</span>
                 <button class="theme-toggle" id="themeToggle">🌙</button>
             </div>
         </header>
@@ -350,6 +372,7 @@
             <button class="tab-btn" data-tab="cabinet">🔐 Кабинет</button>
             <button class="tab-btn" data-tab="settings" id="settingsTab">⚙️ Настройки</button>
             <button class="tab-btn" data-tab="admin" id="adminTab">👑 Админ-панель</button>
+            <button class="tab-btn" data-tab="stats" id="statsTab">📊 Статистика</button>
             <button class="tab-btn" data-tab="changelog">📦 Обновления</button>
             <button class="tab-btn" data-tab="contacts">💬 Контакты</button>
         </nav>
@@ -398,7 +421,7 @@
             </div>
         </div>
 
-        <!-- ===== РЕГИСТРАЦИЯ (с автовыдачей пароля) ===== -->
+        <!-- ===== РЕГИСТРАЦИЯ ===== -->
         <div id="register" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📝 Регистрация</h2>
@@ -450,9 +473,8 @@
         <div id="admin" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">👑 Админ-панель</h2>
-                <p class="sub-text">Управление пользователями: добавление, роли, удаление.</p>
+                <p class="sub-text">Управление пользователями: добавление, роли, удаление, сброс пароля.</p>
 
-                <!-- Добавление пользователя -->
                 <div class="admin-panel-box">
                     <h3 style="color:#b38a9e; font-size:16px;">➕ Добавить пользователя</h3>
                     <input type="text" id="newUserNick" placeholder="Ник">
@@ -466,11 +488,19 @@
                     <div class="admin-status" id="addUserStatus"></div>
                 </div>
 
-                <!-- Список пользователей -->
                 <div>
                     <h3 style="color:#b38a9e; font-size:16px;">👥 Все пользователи</h3>
                     <div class="user-list" id="userList"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ===== СТАТИСТИКА (для хелперов и админов) ===== -->
+        <div id="stats" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📊 Статистика игроков</h2>
+                <p class="sub-text">Общая таблица всех пользователей.</p>
+                <div id="statsTableContainer"></div>
             </div>
         </div>
 
@@ -568,20 +598,30 @@
 
         // ===== РЕАЛЬНЫЙ ОНЛАЙН =====
         function updateOnline() {
-            // Заглушка — показывает случайное число от 0 до 20
-            // Замени на свой API-запрос к серверу DDNet
             const count = Math.floor(Math.random() * 20);
             document.getElementById('onlineCount').textContent = count;
         }
         setInterval(updateOnline, 10000);
         updateOnline();
 
-        // ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
-        function updateStats(nick) {
-            const user = users[nick];
-            if (!user) return;
-            document.getElementById('killsDisplay').textContent = user.kills || 0;
-            document.getElementById('deathsDisplay').textContent = user.deaths || 0;
+        // ===== СТАТИСТИКА (таблица) =====
+        function renderStatsTable() {
+            const container = document.getElementById('statsTableContainer');
+            if (!container) return;
+            let html = '<table class="stats-table">';
+            html += '<tr><th>Ник</th><th>Роль</th><th>Убийств</th><th>Смертей</th></tr>';
+            for (let nick in users) {
+                const u = users[nick];
+                const roleName = u.role === 'admin' ? 'Админ' : u.role === 'helper' ? 'Хелпер' : 'Игрок';
+                html += `<tr>
+                    <td>${nick}</td>
+                    <td>${roleName}</td>
+                    <td>${u.kills || 0}</td>
+                    <td>${u.deaths || 0}</td>
+                </tr>`;
+            }
+            html += '</table>';
+            container.innerHTML = html;
         }
 
         // ===== АВАТАРКИ =====
@@ -636,6 +676,7 @@
                     <span><strong>${nick}</strong> <span class="role ${u.role}">${roleName}</span> (${u.kills || 0}K / ${u.deaths || 0}D)</span>
                     <div>
                         <button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="changeRole('${nick}')">Роль</button>
+                        ${nick !== 'admin' ? `<button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="resetPassword('${nick}')">Сброс пароля</button>` : ''}
                         ${nick !== 'admin' ? `<button class="btn-danger" style="padding:4px 12px; font-size:12px; min-width:auto;" onclick="deleteUser('${nick}')">Удалить</button>` : ''}
                     </div>
                 `;
@@ -649,6 +690,7 @@
                 delete users[nick];
                 saveUsers();
                 renderUserList();
+                renderStatsTable();
                 sendToDiscord('admin', `🗑️ **Удалён пользователь**\nНик: ${nick}`, 0xff5555);
             }
         }
@@ -661,32 +703,56 @@
             users[nick].role = roles[nextIndex];
             saveUsers();
             renderUserList();
+            renderStatsTable();
             sendToDiscord('admin', `🔄 **Смена роли**\nПользователь: ${nick}\nНовая роль: ${roles[nextIndex]}`, 0xffaa55);
         }
 
-        // ===== ВКЛАДКИ (скрываем админку для не-админов) =====
+        function resetPassword(nick) {
+            if (nick === 'admin') { alert('Нельзя сбросить пароль главного админа!'); return; }
+            const newPass = Math.random().toString(36).slice(-8);
+            users[nick].password = newPass;
+            saveUsers();
+            alert(`Новый пароль для ${nick}: ${newPass}`);
+            sendToDiscord('admin', `🔑 **Сброс пароля**\nПользователь: ${nick}\nНовый пароль: ${newPass}`, 0xffaa55);
+        }
+
+        // ===== ВКЛАДКИ (скрываем админку и статистику для не-админов) =====
         function updateTabs() {
             const adminTab = document.getElementById('adminTab');
+            const statsTab = document.getElementById('statsTab');
             const settingsTab = document.getElementById('settingsTab');
-            if (currentUser && users[currentUser] && users[currentUser].role === 'admin') {
-                adminTab.style.display = 'inline-block';
-            } else {
-                adminTab.style.display = 'none';
-                if (document.getElementById('admin').classList.contains('active')) {
-                    document.querySelector('[data-tab="home"]').click();
-                }
+
+            const isAdmin = currentUser && users[currentUser] && users[currentUser].role === 'admin';
+            const isHelper = currentUser && users[currentUser] && users[currentUser].role === 'helper';
+
+            // Админ-панель только для админов
+            adminTab.style.display = isAdmin ? 'inline-block' : 'none';
+            if (!isAdmin && document.getElementById('admin').classList.contains('active')) {
+                document.querySelector('[data-tab="home"]').click();
             }
-            if (currentUser) {
-                settingsTab.style.display = 'inline-block';
-            } else {
-                settingsTab.style.display = 'none';
-                if (document.getElementById('settings').classList.contains('active')) {
-                    document.querySelector('[data-tab="home"]').click();
-                }
+
+            // Статистика для админов и хелперов
+            statsTab.style.display = (isAdmin || isHelper) ? 'inline-block' : 'none';
+            if (!(isAdmin || isHelper) && document.getElementById('stats').classList.contains('active')) {
+                document.querySelector('[data-tab="home"]').click();
+            }
+
+            // Настройки для всех авторизованных
+            settingsTab.style.display = currentUser ? 'inline-block' : 'none';
+            if (!currentUser && document.getElementById('settings').classList.contains('active')) {
+                document.querySelector('[data-tab="home"]').click();
             }
         }
 
-        // ===== РЕГИСТРАЦИЯ (с автовыдачей пароля) =====
+        // ===== СИНХРОНИЗАЦИЯ РОЛЕЙ В DISCORD (заглушка) =====
+        function syncDiscordRole(nick, role) {
+            // Здесь можно подключить реального бота для выдачи ролей в Discord
+            console.log(`[Discord] Синхронизация: ${nick} → ${role}`);
+            // Отправляем уведомление админам
+            sendToDiscord('admin', `🔄 **Синхронизация роли в Discord**\nПользователь: ${nick}\nРоль: ${role}`, 0x88bbff);
+        }
+
+        // ===== РЕГИСТРАЦИЯ =====
         document.getElementById('registerBtn').addEventListener('click', function() {
             const nick = document.getElementById('regNick').value.trim();
             const tg = document.getElementById('regTelegram').value.trim();
@@ -701,16 +767,18 @@
                 status.style.color = '#ff7799';
                 return;
             }
-            // Генерация пароля
             const password = Math.random().toString(36).slice(-8);
             users[nick] = { password: password, role: 'user', kills: 0, deaths: 0, avatar: '' };
             saveUsers();
             renderUserList();
+            renderStatsTable();
             status.textContent = `✅ Аккаунт создан! Твой пароль: ${password}`;
             status.style.color = '#66ddaa';
             document.getElementById('regNick').value = '';
             document.getElementById('regTelegram').value = '';
             sendToDiscord('register', `📝 **Новая регистрация**\nНик: ${nick}\nTelegram: ${tg}\nПароль: ${password}`, 0x66ddaa);
+            // Синхронизация роли в Discord (для нового игрока — роль "user")
+            syncDiscordRole(nick, 'user');
             setTimeout(() => {
                 status.textContent = '⏳ Используй пароль для входа в кабинет';
                 status.style.color = '#b38a9e';
@@ -727,7 +795,8 @@
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('cabinetContent').classList.add('active');
                 document.getElementById('cabinetNick').textContent = nick;
-                updateStats(nick);
+                document.getElementById('killsDisplay').textContent = users[nick].kills || 0;
+                document.getElementById('deathsDisplay').textContent = users[nick].deaths || 0;
                 updateAvatar(nick);
                 renderAvatars();
                 updateTabs();
@@ -770,11 +839,14 @@
             users[nick] = { password: pass, role: role, kills: 0, deaths: 0, avatar: '' };
             saveUsers();
             renderUserList();
+            renderStatsTable();
             status.textContent = '✅ Пользователь добавлен!';
             status.style.color = '#66ddaa';
             document.getElementById('newUserNick').value = '';
             document.getElementById('newUserPass').value = '';
             sendToDiscord('admin', `➕ **Добавлен пользователь**\nНик: ${nick}\nРоль: ${role}`, 0x66ddaa);
+            // Синхронизация роли в Discord
+            syncDiscordRole(nick, role);
         });
 
         // ===== ФОРМА =====
@@ -809,10 +881,11 @@
 
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         renderUserList();
+        renderStatsTable();
         updateTabs();
         console.log('✅ BePro запущен. Админ: admin / admin123');
         console.log('📌 Для реального онлайна замени функцию updateOnline() на API-запрос к твоему серверу.');
-        console.log('📌 Для автовыдачи ролей в Discord настрой бота на сервере.');
+        console.log('📌 Для автовыдачи ролей в Discord настрой функцию syncDiscordRole().');
     </script>
 
 </body>
