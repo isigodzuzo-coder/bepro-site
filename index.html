@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BePro · Полная админ-панель</title>
+    <title>BePro · Полный портал</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -302,7 +302,6 @@
         .user-item .role.helper { background: rgba(255, 200, 50, 0.15); color: #ffcc55; }
         .user-item .role.user { background: rgba(100, 150, 255, 0.1); color: #88bbff; }
 
-        /* СТАТИСТИКА (таблица) */
         .stats-table {
             width: 100%;
             border-collapse: collapse;
@@ -321,6 +320,28 @@
             color: #dcc8d4;
         }
         .stats-table tr:hover td { background: rgba(255, 51, 102, 0.02); }
+
+        .news-item {
+            background: rgba(255, 255, 255, 0.01);
+            padding: 16px 20px;
+            border-radius: 18px;
+            border-left: 4px solid #ff7799;
+            margin-bottom: 12px;
+            color: #dcc8d4;
+        }
+        .news-item .date { font-size: 12px; color: #b38a9e; display: block; margin-bottom: 4px; }
+        .news-item strong { color: #ff7799; }
+
+        .achievement {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #ffd700;
+            margin: 4px;
+        }
 
         .footer {
             margin-top: 40px; text-align: center; font-size: 13px;
@@ -351,7 +372,7 @@
         <header class="header">
             <div class="logo">
                 <h1><i class="fas fa-cherry"></i> BePro</h1>
-                <span>✦ полная админ-панель ✦</span>
+                <span>✦ полный портал ✦</span>
             </div>
             <div class="header-badge">
                 <a href="https://t.me/BePronet" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
@@ -360,7 +381,7 @@
                 <a href="https://discord.gg/H5MSJmq2V" target="_blank" style="color:#ff7799; font-size:18px; margin-right:6px;">
                     <i class="fab fa-discord"></i>
                 </a>
-                <span class="badge">⚡ бета v2.0</span>
+                <span class="badge">⚡ бета v3.0</span>
                 <button class="theme-toggle" id="themeToggle">🌙</button>
             </div>
         </header>
@@ -373,6 +394,9 @@
             <button class="tab-btn" data-tab="settings" id="settingsTab">⚙️ Настройки</button>
             <button class="tab-btn" data-tab="admin" id="adminTab">👑 Админ-панель</button>
             <button class="tab-btn" data-tab="stats" id="statsTab">📊 Статистика</button>
+            <button class="tab-btn" data-tab="top">🏆 Топ</button>
+            <button class="tab-btn" data-tab="news">📰 Новости</button>
+            <button class="tab-btn" data-tab="messages">💬 Сообщения</button>
             <button class="tab-btn" data-tab="changelog">📦 Обновления</button>
             <button class="tab-btn" data-tab="contacts">💬 Контакты</button>
         </nav>
@@ -452,6 +476,7 @@
                         <div class="stat-item"><div class="number kills" id="killsDisplay">0</div><div class="label">Убийств</div></div>
                         <div class="stat-item"><div class="number deaths" id="deathsDisplay">0</div><div class="label">Смертей</div></div>
                     </div>
+                    <div id="achievementsDisplay" style="margin:12px 0;"></div>
                     <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:16px;">
                         <button class="btn-secondary" onclick="alert('Скачивание начнётся в Telegram')">📥 Скачать клиент</button>
                         <button class="btn-outline" id="logoutBtn">🚪 Выйти</button>
@@ -473,7 +498,7 @@
         <div id="admin" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">👑 Админ-панель</h2>
-                <p class="sub-text">Управление пользователями: добавление, роли, удаление, сброс пароля.</p>
+                <p class="sub-text">Управление пользователями, статистикой и новостями.</p>
 
                 <div class="admin-panel-box">
                     <h3 style="color:#b38a9e; font-size:16px;">➕ Добавить пользователя</h3>
@@ -492,10 +517,23 @@
                     <h3 style="color:#b38a9e; font-size:16px;">👥 Все пользователи</h3>
                     <div class="user-list" id="userList"></div>
                 </div>
+
+                <div style="margin-top:16px;">
+                    <h3 style="color:#b38a9e; font-size:16px;">📰 Добавить новость</h3>
+                    <input type="text" id="newsTitle" placeholder="Заголовок" style="width:100%; padding:12px 18px; border-radius:60px; border:1px solid rgba(255,51,102,0.06); background:rgba(255,255,255,0.01); color:#f0e6ec; font-size:14px; outline:none; margin-bottom:8px;">
+                    <textarea id="newsText" placeholder="Текст новости..." style="width:100%; padding:12px 18px; border-radius:24px; border:1px solid rgba(255,51,102,0.06); background:rgba(255,255,255,0.01); color:#f0e6ec; font-size:14px; outline:none; min-height:80px; resize:vertical; margin-bottom:8px;"></textarea>
+                    <button class="btn-primary" id="addNewsBtn">Опубликовать</button>
+                    <div id="addNewsStatus" style="margin-top:8px; font-size:13px; color:#b38a9e;"></div>
+                </div>
+
+                <div style="margin-top:16px;">
+                    <h3 style="color:#b38a9e; font-size:16px;">📤 Экспорт данных</h3>
+                    <button class="btn-secondary" id="exportCSVBtn">Скачать CSV</button>
+                </div>
             </div>
         </div>
 
-        <!-- ===== СТАТИСТИКА (для хелперов и админов) ===== -->
+        <!-- ===== СТАТИСТИКА ===== -->
         <div id="stats" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📊 Статистика игроков</h2>
@@ -504,13 +542,42 @@
             </div>
         </div>
 
+        <!-- ===== ТОП ИГРОКОВ ===== -->
+        <div id="top" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">🏆 Топ игроков по убийствам</h2>
+                <div id="topTableContainer"></div>
+            </div>
+        </div>
+
+        <!-- ===== НОВОСТИ ===== -->
+        <div id="news" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">📰 Новости</h2>
+                <div id="newsList"></div>
+            </div>
+        </div>
+
+        <!-- ===== СООБЩЕНИЯ ===== -->
+        <div id="messages" class="tab-content">
+            <div class="glass-card">
+                <h2 style="color:#ff7799; font-size:24px;">💬 Сообщения</h2>
+                <div id="messageArea"></div>
+                <div style="display:flex; gap:8px; margin-top:12px;">
+                    <input type="text" id="messageInput" placeholder="Написать сообщение..." style="flex:1; padding:12px 18px; border-radius:60px; border:1px solid rgba(255,51,102,0.06); background:rgba(255,255,255,0.01); color:#f0e6ec; font-size:14px; outline:none;">
+                    <button class="btn-primary" id="sendMessageBtn" style="padding:12px 24px; min-width:auto;">Отправить</button>
+                </div>
+                <div style="margin-top:8px; font-size:12px; color:#b38a9e;">Сообщения видят все авторизованные игроки</div>
+            </div>
+        </div>
+
         <!-- ===== ОБНОВЛЕНИЯ ===== -->
         <div id="changelog" class="tab-content">
             <div class="glass-card">
                 <h2 style="color:#ff7799; font-size:24px;">📦 История обновлений</h2>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v2.0.0</strong> — Админ-панель, автовыдача паролей, роли, реальный онлайн</div>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v3.0.0</strong> — Новости, сообщения, топ, ачивки, редактирование статистики, экспорт CSV, PWA</div>
+                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v2.0.0</strong> — Админ-панель, автовыдача паролей, роли</div>
                 <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.6.0</strong> — Раздельные уведомления в Discord</div>
-                <div class="changelog-item"><span class="tag added">NEW</span> <strong>v1.5.0</strong> — Полное описание клиента, сайта и сервера</div>
             </div>
         </div>
 
@@ -566,9 +633,19 @@
 
         // ===== ПОЛЬЗОВАТЕЛИ =====
         let users = JSON.parse(localStorage.getItem('bepro_users')) || {
-            'admin': { password: 'admin123', role: 'admin', kills: 0, deaths: 0, avatar: '' }
+            'admin': { password: 'admin123', role: 'admin', kills: 0, deaths: 0, avatar: '', history: [] }
         };
         function saveUsers() { localStorage.setItem('bepro_users', JSON.stringify(users)); }
+
+        // ===== НОВОСТИ =====
+        let news = JSON.parse(localStorage.getItem('bepro_news')) || [
+            { id: 1, date: '01.07.2026', title: 'BePro запущен!', text: 'Добро пожаловать на наш портал.' }
+        ];
+        function saveNews() { localStorage.setItem('bepro_news', JSON.stringify(news)); }
+
+        // ===== СООБЩЕНИЯ =====
+        let messages = JSON.parse(localStorage.getItem('bepro_messages')) || [];
+        function saveMessages() { localStorage.setItem('bepro_messages', JSON.stringify(messages)); }
 
         // ===== АВАТАРКИ =====
         const avatars = [
@@ -604,12 +681,39 @@
         setInterval(updateOnline, 10000);
         updateOnline();
 
+        // ===== АЧИВКИ =====
+        function getAchievements(user) {
+            const achievements = [];
+            if (user.kills >= 10) achievements.push('🔪 Первые убийства (10)');
+            if (user.kills >= 50) achievements.push('⚔️ Охотник (50)');
+            if (user.kills >= 100) achievements.push('🏹 Мастер (100)');
+            if (user.kills >= 500) achievements.push('🔥 Легенда (500)');
+            if (user.kills >= 1000) achievements.push('👑 Бог убийств (1000)');
+            if (user.deaths >= 10) achievements.push('💀 Бессмертный (10 смертей)');
+            if (user.deaths >= 50) achievements.push('☠️ Живучий (50 смертей)');
+            return achievements;
+        }
+
+        // ===== ИСТОРИЯ =====
+        function addHistory(nick, action) {
+            if (!users[nick]) return;
+            if (!users[nick].history) users[nick].history = [];
+            users[nick].history.push({ date: new Date().toLocaleString(), action: action });
+            saveUsers();
+        }
+
+        function renderHistory(nick) {
+            const user = users[nick];
+            if (!user || !user.history) return '-';
+            return user.history.slice(-5).reverse().map(h => `${h.date}: ${h.action}`).join('<br>');
+        }
+
         // ===== СТАТИСТИКА (таблица) =====
         function renderStatsTable() {
             const container = document.getElementById('statsTableContainer');
             if (!container) return;
             let html = '<table class="stats-table">';
-            html += '<tr><th>Ник</th><th>Роль</th><th>Убийств</th><th>Смертей</th></tr>';
+            html += '<tr><th>Ник</th><th>Роль</th><th>Убийств</th><th>Смертей</th><th>История</th></tr>';
             for (let nick in users) {
                 const u = users[nick];
                 const roleName = u.role === 'admin' ? 'Админ' : u.role === 'helper' ? 'Хелпер' : 'Игрок';
@@ -618,10 +722,43 @@
                     <td>${roleName}</td>
                     <td>${u.kills || 0}</td>
                     <td>${u.deaths || 0}</td>
+                    <td style="font-size:12px;">${renderHistory(nick)}</td>
                 </tr>`;
             }
             html += '</table>';
             container.innerHTML = html;
+        }
+
+        // ===== ТОП =====
+        function renderTop() {
+            const container = document.getElementById('topTableContainer');
+            if (!container) return;
+            const sorted = Object.entries(users).sort((a, b) => (b[1].kills || 0) - (a[1].kills || 0));
+            let html = '<table class="stats-table">';
+            html += '<tr><th>#</th><th>Ник</th><th>Убийств</th></tr>';
+            sorted.forEach(([nick, data], index) => {
+                html += `<tr><td>${index + 1}</td><td>${nick}</td><td>${data.kills || 0}</td></tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // ===== НОВОСТИ =====
+        function renderNews() {
+            const container = document.getElementById('newsList');
+            if (!container) return;
+            container.innerHTML = news.slice().reverse().map(n =>
+                `<div class="news-item"><span class="date">${n.date}</span><strong>${n.title}</strong><div style="margin-top:4px; color:#b38a9e;">${n.text}</div></div>`
+            ).join('');
+        }
+
+        // ===== СООБЩЕНИЯ =====
+        function renderMessages() {
+            const container = document.getElementById('messageArea');
+            if (!container) return;
+            container.innerHTML = messages.map(m =>
+                `<div style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.03);"><strong style="color:#ff7799;">${m.nick}</strong>: ${m.text} <span style="font-size:11px; color:#b38a9e;">${m.time}</span></div>`
+            ).join('');
         }
 
         // ===== АВАТАРКИ =====
@@ -656,6 +793,7 @@
                     saveUsers();
                     updateAvatar(currentUser);
                     renderAvatars();
+                    addHistory(currentUser, 'Сменил аватарку');
                     sendToDiscord('admin', `🖼️ **Смена аватарки**\nПользователь: ${currentUser}`, 0x88bbff);
                 };
                 grid.appendChild(img);
@@ -674,13 +812,31 @@
                 const roleName = u.role === 'admin' ? 'Админ' : u.role === 'helper' ? 'Хелпер' : 'Игрок';
                 div.innerHTML = `
                     <span><strong>${nick}</strong> <span class="role ${u.role}">${roleName}</span> (${u.kills || 0}K / ${u.deaths || 0}D)</span>
-                    <div>
-                        <button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="changeRole('${nick}')">Роль</button>
-                        ${nick !== 'admin' ? `<button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="resetPassword('${nick}')">Сброс пароля</button>` : ''}
-                        ${nick !== 'admin' ? `<button class="btn-danger" style="padding:4px 12px; font-size:12px; min-width:auto;" onclick="deleteUser('${nick}')">Удалить</button>` : ''}
+                    <div style="display:flex; flex-wrap:wrap; gap:4px;">
+                        <button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="editStats('${nick}')">📊</button>
+                        ${nick !== 'admin' ? `<button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="resetPassword('${nick}')">🔑</button>` : ''}
+                        ${nick !== 'admin' ? `<button class="btn-secondary" style="padding:4px 12px; font-size:12px; min-width:auto; margin-right:4px;" onclick="changeRole('${nick}')">🎯</button>` : ''}
+                        ${nick !== 'admin' ? `<button class="btn-danger" style="padding:4px 12px; font-size:12px; min-width:auto;" onclick="deleteUser('${nick}')">🗑️</button>` : ''}
                     </div>
                 `;
                 container.appendChild(div);
+            }
+        }
+
+        function editStats(nick) {
+            const k = prompt(`Убийства для ${nick}:`, users[nick].kills || 0);
+            if (k !== null) {
+                users[nick].kills = parseInt(k) || 0;
+                const d = prompt(`Смерти для ${nick}:`, users[nick].deaths || 0);
+                if (d !== null) {
+                    users[nick].deaths = parseInt(d) || 0;
+                    saveUsers();
+                    renderUserList();
+                    renderStatsTable();
+                    renderTop();
+                    addHistory(nick, 'Статистика изменена админом');
+                    sendToDiscord('admin', `📊 **Изменена статистика**\nПользователь: ${nick}\nУбийства: ${users[nick].kills}\nСмерти: ${users[nick].deaths}`, 0xffaa55);
+                }
             }
         }
 
@@ -691,6 +847,7 @@
                 saveUsers();
                 renderUserList();
                 renderStatsTable();
+                renderTop();
                 sendToDiscord('admin', `🗑️ **Удалён пользователь**\nНик: ${nick}`, 0xff5555);
             }
         }
@@ -704,6 +861,7 @@
             saveUsers();
             renderUserList();
             renderStatsTable();
+            addHistory(nick, `Роль изменена на ${roles[nextIndex]}`);
             sendToDiscord('admin', `🔄 **Смена роли**\nПользователь: ${nick}\nНовая роль: ${roles[nextIndex]}`, 0xffaa55);
         }
 
@@ -712,44 +870,43 @@
             const newPass = Math.random().toString(36).slice(-8);
             users[nick].password = newPass;
             saveUsers();
+            addHistory(nick, 'Пароль сброшен админом');
             alert(`Новый пароль для ${nick}: ${newPass}`);
             sendToDiscord('admin', `🔑 **Сброс пароля**\nПользователь: ${nick}\nНовый пароль: ${newPass}`, 0xffaa55);
         }
 
-        // ===== ВКЛАДКИ (скрываем админку и статистику для не-админов) =====
+        // ===== ВКЛАДКИ =====
         function updateTabs() {
             const adminTab = document.getElementById('adminTab');
             const statsTab = document.getElementById('statsTab');
             const settingsTab = document.getElementById('settingsTab');
+            const topTab = document.querySelector('[data-tab="top"]');
+            const messagesTab = document.querySelector('[data-tab="messages"]');
 
             const isAdmin = currentUser && users[currentUser] && users[currentUser].role === 'admin';
             const isHelper = currentUser && users[currentUser] && users[currentUser].role === 'helper';
 
-            // Админ-панель только для админов
             adminTab.style.display = isAdmin ? 'inline-block' : 'none';
+            statsTab.style.display = (isAdmin || isHelper) ? 'inline-block' : 'none';
+            settingsTab.style.display = currentUser ? 'inline-block' : 'none';
+            topTab.style.display = currentUser ? 'inline-block' : 'none';
+            messagesTab.style.display = currentUser ? 'inline-block' : 'none';
+
             if (!isAdmin && document.getElementById('admin').classList.contains('active')) {
                 document.querySelector('[data-tab="home"]').click();
             }
-
-            // Статистика для админов и хелперов
-            statsTab.style.display = (isAdmin || isHelper) ? 'inline-block' : 'none';
             if (!(isAdmin || isHelper) && document.getElementById('stats').classList.contains('active')) {
                 document.querySelector('[data-tab="home"]').click();
             }
-
-            // Настройки для всех авторизованных
-            settingsTab.style.display = currentUser ? 'inline-block' : 'none';
             if (!currentUser && document.getElementById('settings').classList.contains('active')) {
                 document.querySelector('[data-tab="home"]').click();
             }
-        }
-
-        // ===== СИНХРОНИЗАЦИЯ РОЛЕЙ В DISCORD (заглушка) =====
-        function syncDiscordRole(nick, role) {
-            // Здесь можно подключить реального бота для выдачи ролей в Discord
-            console.log(`[Discord] Синхронизация: ${nick} → ${role}`);
-            // Отправляем уведомление админам
-            sendToDiscord('admin', `🔄 **Синхронизация роли в Discord**\nПользователь: ${nick}\nРоль: ${role}`, 0x88bbff);
+            if (!currentUser && document.getElementById('top').classList.contains('active')) {
+                document.querySelector('[data-tab="home"]').click();
+            }
+            if (!currentUser && document.getElementById('messages').classList.contains('active')) {
+                document.querySelector('[data-tab="home"]').click();
+            }
         }
 
         // ===== РЕГИСТРАЦИЯ =====
@@ -768,17 +925,17 @@
                 return;
             }
             const password = Math.random().toString(36).slice(-8);
-            users[nick] = { password: password, role: 'user', kills: 0, deaths: 0, avatar: '' };
+            users[nick] = { password: password, role: 'user', kills: 0, deaths: 0, avatar: '', history: [] };
             saveUsers();
             renderUserList();
             renderStatsTable();
+            renderTop();
             status.textContent = `✅ Аккаунт создан! Твой пароль: ${password}`;
             status.style.color = '#66ddaa';
             document.getElementById('regNick').value = '';
             document.getElementById('regTelegram').value = '';
+            addHistory(nick, 'Зарегистрировался на сайте');
             sendToDiscord('register', `📝 **Новая регистрация**\nНик: ${nick}\nTelegram: ${tg}\nПароль: ${password}`, 0x66ddaa);
-            // Синхронизация роли в Discord (для нового игрока — роль "user")
-            syncDiscordRole(nick, 'user');
             setTimeout(() => {
                 status.textContent = '⏳ Используй пароль для входа в кабинет';
                 status.style.color = '#b38a9e';
@@ -797,9 +954,13 @@
                 document.getElementById('cabinetNick').textContent = nick;
                 document.getElementById('killsDisplay').textContent = users[nick].kills || 0;
                 document.getElementById('deathsDisplay').textContent = users[nick].deaths || 0;
+                // Ачивки
+                const ach = getAchievements(users[nick]);
+                document.getElementById('achievementsDisplay').innerHTML = ach.map(a => `<span class="achievement">${a}</span>`).join('');
                 updateAvatar(nick);
                 renderAvatars();
                 updateTabs();
+                addHistory(nick, 'Вошёл в кабинет');
                 status.textContent = '✅ Вход выполнен!';
                 status.style.color = '#66ddaa';
                 sendToDiscord('login', `🔐 **Вход в кабинет**\nПользователь: ${nick}`, 0x88bbff);
@@ -810,6 +971,7 @@
         });
 
         document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (currentUser) addHistory(currentUser, 'Вышел из кабинета');
             currentUser = null;
             document.getElementById('loginBox').style.display = 'block';
             document.getElementById('cabinetContent').classList.remove('active');
@@ -836,17 +998,68 @@
                 status.style.color = '#ff7799';
                 return;
             }
-            users[nick] = { password: pass, role: role, kills: 0, deaths: 0, avatar: '' };
+            users[nick] = { password: pass, role: role, kills: 0, deaths: 0, avatar: '', history: [] };
             saveUsers();
             renderUserList();
             renderStatsTable();
+            renderTop();
             status.textContent = '✅ Пользователь добавлен!';
             status.style.color = '#66ddaa';
             document.getElementById('newUserNick').value = '';
             document.getElementById('newUserPass').value = '';
+            addHistory(nick, 'Аккаунт создан админом');
             sendToDiscord('admin', `➕ **Добавлен пользователь**\nНик: ${nick}\nРоль: ${role}`, 0x66ddaa);
-            // Синхронизация роли в Discord
-            syncDiscordRole(nick, role);
+        });
+
+        // ===== АДМИН-ПАНЕЛЬ: НОВОСТИ =====
+        document.getElementById('addNewsBtn').addEventListener('click', function() {
+            const title = document.getElementById('newsTitle').value.trim();
+            const text = document.getElementById('newsText').value.trim();
+            const status = document.getElementById('addNewsStatus');
+            if (!title || !text) {
+                status.textContent = '❌ Заполни заголовок и текст.';
+                status.style.color = '#ff7799';
+                return;
+            }
+            news.push({ id: Date.now(), date: new Date().toLocaleDateString(), title: title, text: text });
+            saveNews();
+            renderNews();
+            status.textContent = '✅ Новость опубликована!';
+            status.style.color = '#66ddaa';
+            document.getElementById('newsTitle').value = '';
+            document.getElementById('newsText').value = '';
+            sendToDiscord('admin', `📰 **Новая новость**\n${title}`, 0x88bbff);
+        });
+
+        // ===== ЭКСПОРТ CSV =====
+        document.getElementById('exportCSVBtn').addEventListener('click', function() {
+            let csv = 'Ник,Роль,Убийства,Смерти\n';
+            for (let nick in users) {
+                const u = users[nick];
+                csv += `${nick},${u.role},${u.kills || 0},${u.deaths || 0}\n`;
+            }
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'users.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            sendToDiscord('admin', `📤 **Экспорт CSV**\nВыполнен экспорт данных`, 0x88bbff);
+        });
+
+        // ===== СООБЩЕНИЯ =====
+        document.getElementById('sendMessageBtn').addEventListener('click', function() {
+            if (!currentUser) { alert('Войдите в кабинет!'); return; }
+            const text = document.getElementById('messageInput').value.trim();
+            if (!text) return;
+            messages.push({ nick: currentUser, text: text, time: new Date().toLocaleTimeString() });
+            saveMessages();
+            renderMessages();
+            document.getElementById('messageInput').value = '';
+            if (messages.length > 0) {
+                sendToDiscord('feedback', `💬 **Новое сообщение**\nОт: ${currentUser}\nСообщение: ${text}`, 0x88bbff);
+            }
         });
 
         // ===== ФОРМА =====
@@ -882,10 +1095,17 @@
         // ===== ИНИЦИАЛИЗАЦИЯ =====
         renderUserList();
         renderStatsTable();
+        renderTop();
+        renderNews();
+        renderMessages();
         updateTabs();
-        console.log('✅ BePro запущен. Админ: admin / admin123');
+        // PWA
+        if ('serviceWorker' in navigator) {
+            // Заглушка для будущего SW
+            console.log('🔧 PWA поддержка готова к подключению');
+        }
+        console.log('✅ BePro v3.0 запущен. Админ: admin / admin123');
         console.log('📌 Для реального онлайна замени функцию updateOnline() на API-запрос к твоему серверу.');
-        console.log('📌 Для автовыдачи ролей в Discord настрой функцию syncDiscordRole().');
     </script>
 
 </body>
